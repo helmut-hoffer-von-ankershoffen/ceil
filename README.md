@@ -31,7 +31,7 @@ Enter `make help` to see available commands.
 
 ### Phase 2: Storage and Loadbalancing
 
-- [x] Dynamic volume provisioning using Heketi + GlusterFS on thumb drives
+- [x] Dynamic volume provisioning using Heketi + GlusterFS spanning thumb drives
 - [x] Enabled persistence for grafana and prometheus
 - [x] MetalLB as LoadBalancer service
 
@@ -42,8 +42,8 @@ Enter `make help` to see available commands.
 - [x] Act as gateway from wlan0 (WiFi) to eth0 (K8S subnet) using iptables
 - [x] Act as VPN server using OpenVPN
 - [x] Dynamically update domain vpn.ceil.pro (or similar) using ddclient and Cloudflare v4 API
+- [x] Raise Firewall using ufw
 - [ ] Act as Docker registry cache
-- [ ] Raise Firewall
 
 ### Phase 4: Scaling
 - [ ] podinfo
