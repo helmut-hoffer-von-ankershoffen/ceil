@@ -1,0 +1,9 @@
+---
+
+- include: install.yml
+  become: true
+  tags: ['ddclient']
+
+- include: configure.yml
+  become: true
+  tags: ['ddclient']

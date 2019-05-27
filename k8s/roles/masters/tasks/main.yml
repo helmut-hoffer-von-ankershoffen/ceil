@@ -1,0 +1,53 @@
+---
+
+- name: "kubeadm init"
+  shell: kubeadm init --ignore-preflight-errors=all --apiserver-advertise-address={{ ansible_default_ipv4.address }} --token={{ kubernetes_token }} --kubernetes-version={{ kubernetes_version }} --pod-network-cidr={{ kubernetes_podnet }}
+  register: kubeadm_init
+  when: kubeadm_reset is succeeded
+  become: true
+
+- name: "Create config directory"
+  file:
+    path: /root/.kube/
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+
+- name: "Copy admin.conf to config directory of root"
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    owner: root
+    group: root
+    mode: 0755
+    remote_src: yes
+    backup: yes
+  become: true
+  when: kubeadm_init
+
+- name: "Copy config to ~/.kube/config"
+  fetch:
+    src: /root/.kube/config
+    dest: ~/.kube/config
+    flat: yes
+
+- name: "Join cluster"
+  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ groups['master'][0] }}:6443 --discovery-token-unsafe-skip-ca-verification
+  when: kubeadm_reset is succeeded
+  become: true
+  register: kubeadm_join
+
+- name: "Install Weave networking"
+  shell: "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')\""
+  become: true
+
+- name: "Poke kubelet"
+  systemd:
+    name: kubelet
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  register: kubelet_poke
+

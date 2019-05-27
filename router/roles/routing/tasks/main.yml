@@ -1,0 +1,97 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+    - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Uninstall packages"
+  apt:
+    state: absent
+    pkg:
+      - isc-dhcp-client
+      - isc-dhcp-common
+
+- name: "Install packages"
+  apt:
+    state: latest
+    pkg:
+      - dhcpcd5
+      - dnsmasq
+      - iptables
+      - iptables-persistent
+  register: install
+
+- name: "Do not manage eth0 via cloud-init"
+  become: true
+  copy:
+    src: 99-disable-network-config.cfg
+    dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+  register: cloudinit
+
+- name: "Remove cloud-init interface definition for eth0"
+  become: true
+  file:
+    path: /etc/network/interfaces.d/50-cloud-init.cfg
+    state: absent
+  register: interfaces
+
+- name: "Configure dhcpcd"
+  become: true
+  copy:
+    src: dhcpcd.conf
+    dest: /etc/dhcpcd.conf
+  register: dhcpcd
+
+- name: "Configure dnsmasq"
+  become: true
+  copy:
+    src: dnsmasq.conf
+    dest: /etc/dnsmasq.conf
+  register: dnsmasq
+
+- name: "Prune leases"
+  become: true
+  file:
+    state: absent
+    path: /var/lib/misc/dnsmasq.leases
+  when: dnsmasq.changed
+
+- name: "Delay start of dnsmasq for dhcpd to have setup eth0"
+  become: true
+  lineinfile:
+    path: /etc/init.d/dnsmasq
+    line: sleep 10
+    insertbefore: .+BEGIN INIT
+  register: dnsmasqDelay
+
+- name: "Ensure sysctl net.ipv4.ip_forward is set to 1"
+  sysctl:
+    name: net.ipv4.ip_forward
+    value: 1
+    state: present
+    reload: yes
+  register: sysctl
+
+- name: "Route from wlan0 to eth0"
+  become: true
+  copy:
+    src: rules.v4
+    dest: /etc/iptables/rules.v4
+  register: iptables
+
+- name: "Reboot"
+  shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: cloudinit.changed or interfaces.changed or install.changed or dhcpcd.changed or dnsmasq.changed or dnsmasqDelay.changed or sysctl.changed or iptables.changed
+  register: rebooted
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 240
+  when: rebooted.changed

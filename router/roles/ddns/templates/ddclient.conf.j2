@@ -1,0 +1,39 @@
+daemon={{ ddclient_period }}
+syslog={{ 'yes' if ddclient_syslog_enable else 'no' }}
+mail={{ ddclient_mail }}
+mail-failure={{ ddclient_mail_failure }}
+pid={{ ddclient_pid }}
+ssl={{ 'yes' if ddclient_ssl_support else 'no' }}
+{% if ddclient_postscript != '' %}
+postscript={{ ddclient_script }}
+{% endif %}
+
+{% if ddclient_method == 'ip' %}
+use=ip, ip={{ ddclient_use_ip }}
+{% endif %}
+{% if ddclient_method == 'web' %}
+use=web, {% if ddclient_web_url != '' %}web={{ ddclient_web_url }}{% if ddclient_use_web_skip %}, web-skip='{{ ddclient_use_web_skip }}'{% endif %}{% endif %}
+
+{% endif %}
+{% if ddclient_method == 'if' %}
+use=if, if={{ ddclient_use_if }}
+{% endif %}
+protocol={{ ddclient_protocol }}
+{% if ddclient_server != '' %}
+server={{ ddclient_server }}
+{% endif %}
+{% if ddclient_zone != '' %}
+zone={{ ddclient_zone }}
+{% endif %}
+login={{ ddclient_login }}
+password={{ ddclient_password }}
+{% if ddclient_mx != '' %}
+mx={{ ddclient_mx }}
+{% endif %}
+{%if ddclient_backup_mx %}
+backupmx=yes
+{% endif %}
+{% if ddclient_wildcard %}
+wilcard=yes
+{% endif %}
+{{ ddclient_hosts|join(',') }}

@@ -1,0 +1,22 @@
+---
+- name: "Create helm config directory"
+  become: true
+  file:
+    path: "~/kubernetes-yaml/helm/"
+    state: directory
+    mode: 0755
+    recurse: yes
+
+- name: "Copy tiller rbac configuration"
+  become: true
+  copy:
+    src: rbac.yaml
+    dest: "~/kubernetes-yaml/helm/rbac.yaml"
+
+- include: setup.yml
+  when:
+  - setup is defined
+
+- include: remove.yml
+  when:
+  - remove is defined

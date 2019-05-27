@@ -1,0 +1,32 @@
+---
+
+- name: "Load CA Cert"
+  slurp:
+    src: "{{ easyrsa.directory }}/keys/ca.crt"
+  register: openvpn_ca_cert_slurp
+
+- name: "Load User Key"
+  slurp:
+    src: "{{ easyrsa.directory }}/keys/{{ client.username }}.key"
+  register: openvpn_user_key_slurp
+
+- name: "Load User Cert"
+  slurp:
+    src: "{{ easyrsa.directory }}/keys/{{ client.username }}.crt"
+  register: openvpn_user_cert_slurp
+
+- name: "Load SSL TLS Auth"
+  slurp:
+    src: "{{ easyrsa.directory }}/keys/ta.key"
+  register: openvpn_tls_auth_slurp
+
+- name: "Generate {{ client.username }}.ovpn"
+  template:
+    src: ovpn.j2
+    dest: "{{ easyrsa.directory }}/keys/{{ client.username }}.ovpn"
+
+- name: "Download generated {{ client.username }}.ovpn into router/out on the workstation"
+  fetch:
+    src: "{{ easyrsa.directory }}/keys/{{ client.username }}.ovpn"
+    dest: "out/{{ client.username }}.ovpn"
+    flat: true

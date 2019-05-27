@@ -1,0 +1,55 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Start Heketi"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    apply -f
+    ~/kubernetes-yaml/heketi/{{ item }}
+  with_items:
+  - heketi-deployment.yml
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for Heketi to be running"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    --selector=name=heketi
+    -o jsonpath='{.items[*].status.phase}'
+  register: get_phase
+  until: get_phase.stdout == 'Running'
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for Heketi to be ready"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    --selector=name=heketi
+    -o jsonpath='{.items[*].status.containerStatuses[*].ready}'
+  register: get_is_ready
+  until: get_is_ready.stdout == 'true'
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]
+
+#- name: "Delete job and secret needed for Heketi bootstrap"
+#  command: >
+#     {{ k8s_heketi_gluster_kubectl }}
+#     delete
+#     --namespace={{ k8s_heketi_gluster_namespace }}
+#     jobs,secret
+#     --all
+#  when: inventory_hostname == groups["master"][0]

@@ -1,0 +1,6 @@
+11.0.0.102 httpd.ceil.local
+11.0.0.102 traefik-ui.ceil.local
+11.0.0.102 prometheus.ceil.local
+11.0.0.102 alertmanager.ceil.local
+11.0.0.102 pushgateway.ceil.local
+11.0.0.102 grafana.ceil.local

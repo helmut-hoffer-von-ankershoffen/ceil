@@ -1,0 +1,63 @@
+---
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Retrieve IPs of GlusterFS pods"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o jsonpath='{.items[?(@.spec.containers[*].name=="glusterfs")].status.podIP}'
+  register: _k8s_heketi_gluster_ips
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Retrieve Heketi service"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get service
+    heketi
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o
+    jsonpath='{.spec.clusterIP}:{.spec.ports[?(@.name=="heketi")].port}'
+  register: _k8s_heketi_gluster_endpoint
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Assert Heketi service obtained"
+  assert:
+    msg: Failed to obtain heketi service IP and port
+    that: "_k8s_heketi_gluster_endpoint.stdout | length > 3"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Set fact get_heketi_endpoint"
+  set_fact:
+    heketi_endpoint: "{{ _k8s_heketi_gluster_endpoint.stdout }}"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Set fact glusternode_count"
+  set_fact:
+    glusterpod_count: "{{ (_k8s_heketi_gluster_ips | length) | int }}"
+  when: inventory_hostname == groups["master"][0]
+
+# volumtype (replication factor): <VolumeDurability>:number eg. none:1, replicate:2, replicate:3 , disperse:???
+# in jinja2 - means remove any whitespace before this bracket
+- name: "Set fact volumetype"
+  set_fact:
+    volumetype: "{% if (glusterpod_count | int) == 1 %}none:1
+                 {%- elif (glusterpod_count | int) == 2 %}replicate:2
+                 {%- else %}replicate:3{% endif %}"
+  when: volumetype is undefined and inventory_hostname == groups["master"][0]
+
+- name: "Render StorageClass"
+  template:
+    src: storage-class.yml.j2
+    dest: "~/kubernetes-yaml/heketi/storage-class.yml"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Create StorageClass"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    apply -f
+    ~/kubernetes-yaml/heketi/storage-class.yml
+  when: inventory_hostname == groups["master"][0]

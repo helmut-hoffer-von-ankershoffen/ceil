@@ -1,0 +1,14 @@
+---
+# handlers file for pipoe2h.pivpn
+
+- name: "restart openvpn"
+  service:
+    name: openvpn@server
+    state: restarted
+  when: easyrsaconfig.changed
+
+- name: "restart networking"
+  service:
+    name: networking
+    state: restarted
+  when: easyrsaconfig.changed

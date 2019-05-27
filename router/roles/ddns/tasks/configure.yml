@@ -1,0 +1,35 @@
+---
+
+- name: "Generate ddclient config file"
+  file:
+    state: directory
+    path: "/etc/ddclient"
+  register: res
+  notify: service ddclient restart
+
+- name: "Generate ddclient config file"
+  template:
+    src: ddclient.conf.j2
+    dest: "{{ ddclient_config }}"
+    mode: 0640
+    owner: root
+    group: "{{ ddclient_group }}"
+  register: res
+  notify: service ddclient restart
+
+- name: "Generate ddclient mode file"
+  template:
+    src: ddclient.j2
+    dest: "{{ ddclient_mode }}"
+    mode: 0640
+    owner: root
+    group: "{{ ddclient_group }}"
+  register: res
+  notify: service ddclient restart
+
+- name: "Manage service"
+  service:
+    name: "{{ ddclient_service_name }}"
+    state: started
+    enabled: yes
+  when: not res.changed

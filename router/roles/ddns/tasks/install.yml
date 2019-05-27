@@ -1,0 +1,25 @@
+---
+
+- name: "Install required packages"
+  apt:
+    state: latest
+    pkg:
+      - ddclient
+      - cpanminus
+      - make
+      - sendmail
+
+- name: "Update ddclient from source for Cloudflare API v4 support"
+  become: true
+  get_url:
+    url: https://raw.githubusercontent.com/ddclient/ddclient/master/ddclient
+    dest: /usr/sbin/ddclient
+    force: yes
+
+- name: "Install perl libs"
+  cpanm:
+    name: "{{ item }}"
+    system_lib: yes
+  with_items:
+    - "JSON::Any"
+    - "Data::Validate::IP"

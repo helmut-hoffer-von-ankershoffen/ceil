@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+  - name: "Wipe signature and partitions of thumb drives"
+    command: >
+      wipefs --all --force /dev/sda

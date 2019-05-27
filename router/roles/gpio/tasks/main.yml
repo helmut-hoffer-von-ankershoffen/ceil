@@ -1,0 +1,44 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Download wiringpi library"
+  become: true
+  get_url:
+    url: https://lion.drogon.net/wiringpi-2.50-1.deb
+    dest: /tmp/wiringpi-2.50-1.deb
+    force: yes
+
+- name: "Install library"
+  become: true
+  shell: cd /tmp && dpkg -i wiringpi-2.50-1.deb
+
+- name: "Read all GPIO pins"
+  command: gpio readall
+  register: gpio
+
+- debug: msg="{{ gpio.stdout }}"
+
+- name: "Install packages"
+  apt:
+    state: latest
+    pkg:
+      - python-pip
+      - python-dev
+      - python-rpi.gpio
+  register: install
+
+- name: "Clone PiTraffic repository"
+  git:
+    repo: 'https://github.com/sbcshop/PiTraffic.git'
+    dest: /home/admin/PiTraffic
+    version: master
+
+- name: "Simulate traffic"
+  shell: "timeout 30 python /home/admin/PiTraffic/TrafficTest.py"
+  become: true
+  ignore_errors: true
+

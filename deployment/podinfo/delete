@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+
+helm delete --purge podinfo || true
+kubectl delete namespace podinfo || true

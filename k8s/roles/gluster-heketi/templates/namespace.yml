@@ -1,0 +1,7 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: {{ k8s_heketi_gluster_namespace }}
+  labels:
+    name: {{ k8s_heketi_gluster_namespace }}

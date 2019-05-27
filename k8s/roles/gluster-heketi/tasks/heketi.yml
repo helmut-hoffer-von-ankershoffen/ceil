@@ -1,0 +1,103 @@
+# https://github.com/heketi/heketi/blob/v6.0.0/docs/admin/install-kubernetes.md
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+    - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Create Hekety yaml directory"
+  file:
+    path: ~/kubernetes-yaml/heketi/
+    state: directory
+    mode: 0755
+    recurse: yes
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Copy Heketi configuration"
+  template:
+    src: "{{ item }}"
+    dest: "~/kubernetes-yaml/heketi/{{ item | basename }}"
+  with_items:
+  - heketi-role.yml
+  - heketi-bootstrap.yml
+  - heketi-deployment.yml
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Retrieve IPs of GlusterFS pods"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o jsonpath='{.items[?(@.spec.containers[*].name=="glusterfs")].status.podIP}'
+  register: get_ips
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Set fact endpoint_list"
+  set_fact:
+    endpoint_list: "[\"{{get_ips.stdout | replace(' ','\",\"')}}\"]"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Retrieve names of GlusterFS nodes"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o jsonpath='{.items[?(@.spec.containers[*].name=="glusterfs")].spec.nodeName}'
+  register: get_nodenames
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Set fact host_list"
+  set_fact:
+    host_list: "[\"{{get_nodenames.stdout | replace(' ','\",\"')}}\"]"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Combine host-list with endpoint-list"
+  set_fact:
+    combined_host_ip: "{{ combined_host_ip|default({})|combine({item.0: item.1}) }}"
+  with_together:
+    - "{{ host_list }}"
+    - "{{ endpoint_list }}"
+  register: combined_host_ip
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Render Heketi topology"
+  template:
+    src: topology.json.j2
+    dest: "~/kubernetes-yaml/heketi/topology.json"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Download and extract Heketi client"
+  unarchive:
+    src: "{{ k8s_heketi_distribution }}"
+    dest: "~/"
+    remote_src: yes
+    extra_opts:
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Check if Heketi already bootstrapped"
+  stat:
+    path: "~/kubernetes-yaml/heketi/heketi-storage.json"
+  register: _k8s_heketi_gluster_storage_exists
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Check if final Heketi already deployed"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    get deploy heketi
+  register: _k8s_heketi_gluster_exists
+  failed_when: _k8s_heketi_gluster_exists.rc not in [0, 1]
+  when: inventory_hostname == groups["master"][0]
+
+# Consistency check: If final heketi already deployed but no
+# heketi-storage.json something has gone wrong, bail
+- name: "Check Heketi deployments and heketi-storage.json consistent"
+  fail:
+    msg: Heketi already deployed but heketi-storage.json not found
+  when: inventory_hostname == groups["master"][0] and hostvars[groups['master'][0]]._k8s_heketi_gluster_exists.rc == 0 and not _k8s_heketi_gluster_storage_exists.stat.exists
+
+# If deploy/heketi exists this means heketi has already been bootstrapped
+# so skip
+- include: heketi-bootstrap.yml
+  when: inventory_hostname == groups["master"][0] and hostvars[groups['master'][0]]._k8s_heketi_gluster_exists.rc == 1

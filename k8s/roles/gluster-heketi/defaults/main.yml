@@ -1,0 +1,44 @@
+# If True make this the default storage class for dynamically provisioned volumes
+k8s_heketi_gluster_default_storageclass: true
+
+# If True nodes will be labeled and tainted NoSchedule
+k8s_heketi_gluster_force_dedicated: false
+
+# Kubernetes tolerations
+k8s_heketi_gluster_tolerations:
+
+# GlusterFS on master nodes disabled due to memory constraints
+#  - key: node-role.kubernetes.io/master
+#    operator: Equal
+#    value: "true"
+#    effect: NoSchedule
+#  - key: node-role.kubernetes.io/master
+#    operator: Equal
+#    effect: NoSchedule
+
+# Kubernetes node-selector
+k8s_heketi_gluster_nodeselector:
+
+# The underlying raw storage device
+k8s_heketi_gluster_storage_device: "/dev/sda"
+
+# Gluster docker image
+k8s_heketi_gluster_image: "apcheamitru/arm32v7-gluster-fedora:4.1.6"
+
+# Heketi docker image
+k8s_heketi_heketi_image: "sputnik13/heketi:9.0.0-arm32v7"
+
+# Heketi distribution
+k8s_heketi_distribution: "https://github.com/heketi/heketi/releases/download/v9.0.0/heketi-client-v9.0.0.linux.arm.tar.gz"
+
+# kubectl binary
+k8s_heketi_gluster_kubectl: "kubectl"
+
+# Namespace for all resources
+k8s_heketi_gluster_namespace: "storage-heketi"
+
+# Require kernel modules for Gluster Heketi
+k8s_heketi_gluster_required_modules:
+- dm_snapshot
+- dm_mirror
+- dm_thin_pool
