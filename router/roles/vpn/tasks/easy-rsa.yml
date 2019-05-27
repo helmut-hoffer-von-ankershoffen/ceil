@@ -1,0 +1,109 @@
+---
+
+- include_vars: defaults/credentials.yml
+
+- name: "Check if Easy RSA directory exists"
+  stat:
+    path: "{{ easyrsa.directory }}"
+  register: easydir
+
+- name: "Copy Easy RSA"
+  shell: cp -r /usr/share/easy-rsa "{{ easyrsa.directory }}"
+  when: easydir.stat.exists == False
+
+- name: "Copy Easy RSA vars file"
+  template:
+    src: "{{ role_path }}/templates/easyrsa_vars.j2"
+    dest: "{{ easyrsa.directory }}/vars"
+    mode: 0644
+    owner: root
+    group: root
+
+- name: "Select OpenSSL config"
+  file:
+    state: link
+    src: "{{ easyrsa.directory }}/openssl-1.0.0.cnf"
+    path: "{{ easyrsa.directory }}/openssl.cnf"
+
+- name: "Remove --interact option for all the build-* scripts"
+  replace:
+    dest: "{{ easyrsa.directory }}/{{ item }}"
+    regexp: ' --interact'
+    replace: ''
+    backup: yes
+  with_items:
+    - build-ca
+    - build-inter
+    - build-key
+    - build-key-pass
+    - build-key-pkcs12
+    - build-key-server
+    - build-req
+    - build-req-pass
+
+- name: "Check if Easy RSA keys directory exists"
+  stat:
+    path: "{{ easyrsa.directory }}/keys"
+  register: easykeysdir
+
+- name: "Configure Easy RSA certificates"
+  shell: source ./vars && ./clean-all && ./build-ca && ./build-key-server "{{ ansible_hostname }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa.directory }}"
+  when: easykeysdir.stat.exists == False
+  register: easyrsaconfig
+
+- name: "Modify pkitool to allow passout client password"
+  replace:
+    dest: "{{ easyrsa.directory }}/pkitool"
+    regexp: 'NODES_REQ=""'
+    replace: 'NODES_REQ="-passout env:KEY_PASSWORD"'
+    backup: yes
+
+- name: "Check if Easy RSA client certificate exists"
+  stat:
+    path: "{{ easyrsa.directory }}/keys/{{ client.username }}.key"
+  register: easyclient
+  when: client != ""
+
+- name: "Create Easy RSA certificate for OpenVPN client"
+  shell: source ./vars && ./build-key-pass "{{ client.username }}"
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa.directory }}"
+  environment:
+    KEY_PASSWORD: "{{ client.password }}"
+  when: easyclient is defined and easyclient.stat.exists == False
+
+- name: "Check if Easy RSA DES3 client certificate exists"
+  stat:
+    path: "{{ easyrsa.directory }}/keys/{{ client.username }}.3des.key"
+  register: easyclientdes3
+  when: client != ""
+
+- name: "Convert OpenVPN client key to DES3 for Android or iOS clients"
+  shell: openssl rsa -in "{{ client.username }}.key" -des3 -out "{{ client.username }}.3des.key" -passin pass:$KEY_PASSWORD -passout pass:$KEY_PASSWORD
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa.directory }}/keys"
+  environment:
+    KEY_PASSWORD: "{{ client.password }}"
+  when: easyclientdes3 is defined and easyclientdes3.stat.exists == False 
+
+- name: "Check if Easy RSA DH pem exists"
+  stat:
+    path: "{{ easyrsa.directory }}/keys/dh{{ certificate.key_size }}.pem"
+  register: easydh
+
+- debug: msg="Be patient with the next play, that will take a while"
+
+- name: "Build Easy RSA DH"
+  shell: source ./vars && ./build-dh
+  args:
+    executable: /bin/bash
+    chdir: "{{ easyrsa.directory }}"
+  async: 5000
+  poll: 30
+  notify: restart openvpn
+  when: easydh.stat.exists == False

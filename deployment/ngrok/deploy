@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+cd "$(dirname "$0")"
+
+helm repo add sp https://stefanprodan.github.io/k8s-podinfo
+kubectl create namespace ngrok
+helm install sp/ngrok --name ngrok \
+  --namespace ngrok \
+  --set token=3KyGMthBXqqzLX6dAsA5C_5x8kyhxVbb1TtBwmt48uW \
+  --set service.type=NodePort \
+  --set expose.service=ngrok-podinfo:9898 \
+  --set image.repository=wernight/ngrok \
+  --set image.tag=latest

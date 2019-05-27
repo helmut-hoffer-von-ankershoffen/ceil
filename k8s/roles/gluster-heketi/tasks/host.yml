@@ -1,0 +1,25 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Load required kernel modules"
+  become: true
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ k8s_heketi_gluster_required_modules }}"
+
+- name: "Load required kernel modules on startup"
+  become: true
+  template:
+    src: glusterfs-dm.conf.j2
+    dest: /etc/modules-load.d/glusterfs-dm.conf
+
+- name: "Install prerequisites on hosts for mounting GlusterFS filesystems"
+  apt:
+    state: latest
+    pkg:
+    - glusterfs-client

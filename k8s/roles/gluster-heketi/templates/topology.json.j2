@@ -1,0 +1,29 @@
+{
+  "clusters": [
+    {
+      "nodes": [
+        {%- for host,ip in combined_host_ip.items()  %}
+           {
+             "node": {
+               "hostnames": {
+                 "manage": [
+                   "{{ host }}"
+                 ],
+                 "storage": [
+                   "{{ ip }}"
+                 ]
+               },
+               "zone": 1
+             },
+             "devices": [
+               "{{ k8s_heketi_gluster_storage_device }}"
+             ]
+           }
+           {% if not loop.last %}
+              ,
+           {%endif%}
+        {% endfor %}
+      ]
+    }
+  ]
+}

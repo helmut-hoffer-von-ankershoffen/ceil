@@ -1,0 +1,15 @@
+---
+
+- name: "Join cluster"
+  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ groups['master'][0] }}:6443 --discovery-token-unsafe-skip-ca-verification
+  when: kubeadm_reset is succeeded
+  register: kubeadm_join
+  become: true
+
+- name: "Poke kubelet"
+  systemd:
+    name: kubelet
+    state: restarted
+    daemon_reload: yes
+    enabled: yes
+  register: kubelet_poke

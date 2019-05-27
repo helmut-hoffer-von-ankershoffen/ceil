@@ -1,0 +1,150 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+    - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Ensure hostname set"
+  hostname:
+    name: "{{ inventory_hostname }}"
+  when: not inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')
+  register: hostname
+
+- name: "Detach cloud-init from managing /etc/hosts (does not work)"
+  lineinfile:
+    dest: /var/lib/cloud/instance/user-data.txt
+    regexp: 'manage_etc_hosts:.+$'
+    line: "manage_etc_hosts: false"
+    state: present
+  become: true
+  register: hostname
+
+- name: "Ensure all hostnames in /etc/hosts"
+  lineinfile:
+    dest: /etc/hosts
+    regexp: '{{ hostvars[item].ansible_default_ipv4.address }}.+$'
+    line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}"
+    state: present
+  with_items: "{{ groups.all }}"
+  become: true
+  register: hostname
+
+- name: "Enabling cgroup options at boot and setup necessary cgroups"
+  copy:
+    src: cmdline.txt
+    dest: /boot/cmdline.txt
+    owner: root
+    group: root
+    mode: 0755
+  register: cmdline
+
+- name: "Select cgroup driver"
+  lineinfile:
+    dest: /lib/systemd/system/docker.service
+    regexp: 'ExecStart.+$'
+    line: "ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock --exec-opt native.cgroupdriver=cgroupfs"
+    state: present
+  become: true
+  register: docker
+
+- name: "Disable swap in fstab"
+  replace:
+    path: /etc/fstab
+    regexp: '^(.+?\sswap\s+sw\s+.*)$'
+    replace: '# \1'
+  register: swap
+
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
+- name: "apt-get upgrade"
+  apt:
+    upgrade: full
+  register: upgrade
+
+- name: "Install prerequisites"
+  apt:
+    state: latest
+    pkg:
+    - ntp
+    - telnet
+    - ca-certificates
+    - curl
+    - gnupg2
+    - software-properties-common
+    - ipvsadm
+    - docker-ce
+
+- name: "Reboot"
+  shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: hostname.changed or cmdline.changed or docker.changed or upgrade.changed or swap.changed
+  register: rebooted
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 240
+  when: rebooted.changed
+
+- name: "Sleep"
+  delegate_to: localhost
+  shell: sleep 30
+  sudo: false
+  when: rebooted.changed
+
+- name: "Pass bridged IPv4 traffic to iptables' chains"
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: 1
+    state: present
+
+- name: "Add Google Cloud repo key"
+  apt_key:
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+    state: present
+
+- name: "Add Kubernetes to apt repositories"
+  apt_repository:
+    repo: 'deb http://apt.kubernetes.io/ kubernetes-xenial main'
+    state: present
+    filename: kubernetes
+    update_cache: yes
+
+- name: "Install k8s ({{ kubernetes_package_version }})"
+  apt:
+    state: present
+    force: yes
+    update_cache: yes
+    pkg:
+    - kubelet={{ kubernetes_package_version }}
+    - kubeadm={{ kubernetes_package_version }}
+    - kubectl={{ kubernetes_package_version }}
+    - kubernetes-cni
+  ignore_errors: yes
+
+- name: "kubeadmn config images pull"
+  shell: kubeadm config images pull --kubernetes-version={{ kubernetes_version }}
+
+- name: "Reset K8S"
+  shell: kubeadm reset -f
+  register: kubeadm_reset
+  become: true
+
+- name: "Create net.d"
+  file:
+    path: "/etc/cni/net.d"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+  become: true

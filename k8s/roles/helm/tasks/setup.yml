@@ -1,0 +1,15 @@
+---
+
+- name: "Create tiller service account and role binding"
+  become: true
+  command: kubectl create -f ~/kubernetes-yaml/helm/rbac.yaml
+  ignore_errors: true
+
+- name: "Init helm on workstation and install tiller in cluster"
+  command: helm init --service-account tiller --tiller-image=jessestuart/tiller --history-max 20 --wait
+  sudo: no
+  delegate_to: localhost
+  register: helm
+
+- debug: msg="{{ helm.stdout }}"
+- debug: msg="{{ helm.stderr }}"

@@ -1,0 +1,17 @@
+---
+- name: "Taint GlusterFS nodes"
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    taint node --overwrite=true -l storagenode=glusterfs dedicated=fileserver:NoSchedule
+  when: k8s_heketi_gluster_force_dedicated
+
+- include: host.yml
+
+- include: gluster-daemonset.yml
+
+- include: heketi.yml
+  # This includes heketi-bootstrap.yml if necessary
+
+- include: heketi-final.yml
+
+- include: storage-creation.yml

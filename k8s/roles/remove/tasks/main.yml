@@ -1,0 +1,121 @@
+---
+
+- name: "Reset Kubernetes"
+  shell: echo $(kubeadm reset && echo 'true')
+  ignore_errors: true
+
+- name: "Stop all docker containers"
+  shell: "docker stop $(docker ps -a -q)"
+  ignore_errors: true
+
+- name: "Prune docker"
+  shell: docker system prune -a -f
+  ignore_errors: true
+
+- name: "Reboot"
+  shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: "Sleep"
+  delegate_to: localhost
+  shell: sleep 30
+  sudo: false
+  when: rebooted.changed
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 120
+
+- name: "Remove k8s config"
+  file:
+    state: absent
+    path: /etc/kubernetes
+  ignore_errors: true
+
+- name: "Remove kubelet config"
+  file:
+    state: absent
+    path: /var/lib/kubelet
+  ignore_errors: true
+
+- name: "Remove etcd config"
+  file:
+    state: absent
+    path: /var/lib/etcd
+  ignore_errors: true
+
+- name: "Remove kube config"
+  file:
+    state: absent
+    path: /root/.kube
+  ignore_errors: true
+
+- name: "cni0/cbr0 IP alloction issue"
+  shell: 'rm -rf /var/lib/cni/ /etc/cni/ ; ip link delete cni0; ip link delete cbr0 ; ip link delete weave'
+  ignore_errors: yes
+
+- name: "ipvsadm clear"
+  shell: 'ipvsadm --clear'
+  ignore_errors: yes
+
+- name: "Reset iptables rules" # THIS TASK SHOULD BE REMOVED, is not maintained
+  shell: iptables-save | awk '/^[*]/ { print $1 } /^:[A-Z]+ [^-]/ { print $1 " ACCEPT" ; } /COMMIT/ { print $0; }' | iptables-restore
+  when: iptables_reset is defined and iptables_reset
+  ignore_errors: yes
+
+- name: "Remove pod logs"
+  file:
+    state: absent
+    path: /var/log/pods
+  ignore_errors: true
+
+- name: "Reset K8S"
+  shell: kubeadm reset -f
+  register: kubeadm_reset
+  become: true
+  ignore_errors: true
+
+- name: "Delete net.d"
+  file:
+    path: "/etc/cni/net.d"
+    state: absent
+  become: true
+  ignore_errors: true
+
+- name: "Clean package caches"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+  ignore_errors: true
+
+- name: "Purge packages"
+  apt:
+    state: absent
+    purge: yes
+    autoremove: yes
+    force: yes
+    pkg:
+    - kubelet
+    - kubeadm
+    - kubectl
+  ignore_errors: true
+
+- name: "Reboot"
+  shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 120
+

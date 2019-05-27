@@ -1,0 +1,6 @@
+---
+
+- hosts: master
+  roles:
+  - role: helm
+    remove: true

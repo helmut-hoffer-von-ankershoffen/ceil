@@ -1,0 +1,20 @@
+---
+
+- name: "Install"
+  shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/aio/deploy/recommended/kubernetes-dashboard-arm.yaml
+
+- name: "Copy rbac definition"
+  copy:
+    src: dashboard-admin.yaml
+    dest: /tmp/dashboard-admin.yaml
+
+- name: "Apply rbac"
+  shell: kubectl apply -f /tmp/dashboard-admin.yaml
+
+- name: "Remove rbac definition"
+  file:
+    path: /tmp/dashboard-admin.yaml
+    state: absent
+
+- name: "Force rebuild of pods"
+  shell: kubectl -n kube-system delete $(kubectl -n kube-system get pod -o name | grep dashboard)

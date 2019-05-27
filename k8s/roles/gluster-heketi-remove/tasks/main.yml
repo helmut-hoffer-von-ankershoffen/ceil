@@ -1,0 +1,63 @@
+---
+- name: "Check all hosts accessible"
+  assert:
+    that:
+    - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Remove packages on all hosts"
+  apt:
+    state: absent
+    purge: true
+    pkg:
+    - glusterfs-client
+  ignore_errors: true
+
+- name: "Delete all resources in k8s"
+  command: >
+    kubectl delete all --namespace=storage-heketi --all
+  when: inventory_hostname == groups["master"][0]
+  ignore_errors: true
+
+- name: "Delete all Secrets in k8s"
+  command: >
+    kubectl delete secrets --namespace=storage-heketi --all
+  when: inventory_hostname == groups["master"][0]
+  ignore_errors: true
+
+- name: "Delete Namespace in k8s"
+  command: >
+    kubectl delete namespaces storage-heketi
+  when: inventory_hostname == groups["master"][0]
+  ignore_errors: true
+
+- name: "Delete StorageClass in k8s"
+  command: >
+    kubectl delete storageclass gluster-heketi
+  when: inventory_hostname == groups["master"][0]
+  ignore_errors: true
+
+- name: "Delete services in k8s"
+  shell: >
+    kubectl get services -n default --no-headers=true | awk '/glusterfs-dynamic/{print $1}' | xargs kubectl delete -n default service
+  when: inventory_hostname == groups["master"][0]
+  ignore_errors: true
+
+- name: "Prune docker on all hosts"
+  command: >
+    docker system prune -a -f
+  ignore_errors: true
+
+- name: "Delete data on all hosts"
+  become: true
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - ~/heketi-client
+  - ~/kubernetes-yaml
+  - /var/lib/heketi
+  - /etc/glusterfs
+  - /var/log/glusterfs
+  - /var/lib/glusterd
+  - /etc/init.d/glusterd
+  ignore_errors: true

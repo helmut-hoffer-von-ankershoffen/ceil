@@ -1,0 +1,120 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+    - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Start Heketi bootstrap"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    apply -f
+    ~/kubernetes-yaml/heketi/{{ item }}
+  with_items:
+  - heketi-role.yml
+  - heketi-bootstrap.yml
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for Heketi bootstrap to be running"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    --selector=name=deploy-heketi
+    -o jsonpath='{.items[*].status.phase}'
+  register: get_phase
+  until: get_phase.stdout == 'Running'
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for Heketi bootstrap to be ready"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    --selector=name=deploy-heketi
+    -o jsonpath='{.items[*].status.containerStatuses[*].ready}'
+  register: get_is_ready
+  until: get_is_ready.stdout == 'true'
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Retrieve Heketi bootstrap service"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get service
+    deploy-heketi
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o
+    jsonpath='{.spec.clusterIP}:{.spec.ports[?(@.name=="deploy-heketi")].port}'
+  register: get_heketi_bootstrap_endpoint
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Assert Heketi bootstrap service obtained"
+  become: true
+  assert:
+    msg: Failed to obtain heketi bootstrap service IP and port
+    that: "get_heketi_bootstrap_endpoint.stdout | length > 3"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Apply topology-file to heketi"
+  become: true
+  command: >
+    $HOME/heketi-client/bin/heketi-cli
+    -s http://{{ get_heketi_bootstrap_endpoint.stdout }}
+    topology load
+    --json=$HOME/kubernetes-yaml/heketi/topology.json
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Create Heketi persistent db volume"
+  become: true
+  command: >
+    ~/heketi-client/bin/heketi-cli
+    -s http://{{ get_heketi_bootstrap_endpoint.stdout }}
+    setup-openshift-heketi-storage
+    --image {{ k8s_heketi_heketi_image }}
+  args:
+    chdir: "~/kubernetes-yaml/heketi"
+    creates: heketi-storage.json
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Read Heketi storage file"
+  become: true
+  slurp:
+    src: "~/kubernetes-yaml/heketi/heketi-storage.json"
+  register: _k8s_heketi_gluster_heketi_storage_json
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Copy Heketi storage file"
+  become: true
+  copy:
+    content: "{{ hostvars[groups['master'][0]]._k8s_heketi_gluster_heketi_storage_json.content | b64decode }}"
+    dest: "~/kubernetes-yaml/heketi/heketi-storage.json"
+
+- name: "Configure Heketi persistent db volume"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    apply
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -f $HOME/kubernetes-yaml/heketi/heketi-storage.json
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Delete Heketi bootstrap deployment"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    delete
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    deployment/deploy-heketi service/deploy-heketi
+  when: inventory_hostname == groups["master"][0]
+
+

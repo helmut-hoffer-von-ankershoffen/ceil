@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+  - name: wipe signature and partitions
+    command: >
+      wipefs --all --force /dev/sda

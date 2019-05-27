@@ -1,0 +1,59 @@
+---
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: httpd
+  namespace: default
+  labels:
+    k8s-app: httpd
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        k8s-app: httpd
+    spec:
+      containers:
+      - image: hypriot/rpi-busybox-httpd
+        name: httpd
+        resources:
+          limits:
+            cpu: 200m
+            memory: 30Mi
+          requests:
+            cpu: 100m
+            memory: 20Mi
+        ports:
+        - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpd
+  namespace: default
+spec:
+  selector:
+    k8s-app: httpd
+  ports:
+  - name: httpd
+    port: 8080
+    targetPort: 80
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: httpd
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
+spec:
+  rules:
+  - host: httpd.ceil.local
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: httpd
+          servicePort: httpd

@@ -1,0 +1,16 @@
+---
+
+- name: "Delete tiller service account and role binding"
+  become: true
+  command: kubectl delete -f ~/kubernetes-yaml/helm/rbac.yaml
+  ignore_errors: true
+
+- name: "Rest helm on workstation"
+  command: timeout 10 helm reset --force
+  sudo: no
+  delegate_to: localhost
+  register: helm
+  ignore_errors: true
+
+- debug: msg="{{ helm.stdout }}"
+- debug: msg="{{ helm.stderr }}"

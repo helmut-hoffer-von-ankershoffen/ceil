@@ -1,0 +1,72 @@
+---
+# If a node becomes unreachable Ansible will continue, but for setting up
+# the storage cluster we need all nodes to be up
+# https://github.com/ansible/ansible/issues/18782#issuecomment-318457240
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+# https://github.com/gluster/gluster-kubernetes/blob/27ed3198b57d19ae3230e103a17fc3729e1315ed/deploy/gk-deploy
+
+- name: "Create GlusterFS config directory"
+  become: true
+  file:
+    path: "~/kubernetes-yaml/glusterfs/"
+    state: directory
+    mode: 0755
+    recurse: yes
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Copy GlusterFS Namespace configuration"
+  become: true
+  template:
+    src: namespace.yml
+    dest: "~/kubernetes-yaml/glusterfs/namespace.yml"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Copy GlusterFS DaemonSet configuration"
+  become: true
+  template:
+    src: glusterfs-daemonset.yml.j2
+    dest: "~/kubernetes-yaml/glusterfs/glusterfs-daemonset.yml"
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Create GlusterFS Namespace and DaemonSet"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    apply -f
+    ~/kubernetes-yaml/{{ item }}
+  with_items:
+  - glusterfs/namespace.yml
+  - glusterfs/glusterfs-daemonset.yml
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for GlusterFS DaemonSet to be running"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o jsonpath='{.items[?(@.spec.containers[*].name=="glusterfs")].status.phase}'
+  register: get_phase
+  until: get_phase.stdout is match('^(Running\s)*Running$')
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Wait for GlusterFS DaemonSet to be ready"
+  become: true
+  command: >
+    {{ k8s_heketi_gluster_kubectl }}
+    get pods
+    --namespace={{ k8s_heketi_gluster_namespace }}
+    -o jsonpath='{.items[?(@.spec.containers[*].name=="glusterfs")].status.containerStatuses[*].ready}'
+  register: get_is_ready
+  until: get_is_ready.stdout is match( '^(true\s)*true$' )
+  # Wait for 10 minutes
+  retries: 120
+  delay: 5
+  when: inventory_hostname == groups["master"][0]

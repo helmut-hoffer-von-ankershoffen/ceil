@@ -1,0 +1,11 @@
+- hosts: master
+  roles:
+  - role: helm
+    remove: true
+
+- hosts: all
+  roles:
+    - gluster-heketi-remove
+    - remove
+
+

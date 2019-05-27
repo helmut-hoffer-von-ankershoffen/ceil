@@ -1,0 +1,6 @@
+---
+
+- include: install.yml
+- include: easy-rsa.yml
+- include: openvpn.yml
+- include: client.yml

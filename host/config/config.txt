@@ -1,0 +1,5 @@
+# For boot config, see https://www.raspberrypi.org/documentation/configuration/config-txt/
+max_usb_current=1
+hdmi_force_hotplug=1
+enable_uart=0
+gpu_mem=16
