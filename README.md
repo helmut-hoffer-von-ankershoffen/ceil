@@ -157,6 +157,7 @@ Notes:
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
 - If on your workstation `nslookup ceil-{one,two,three.four}.dev` works but `ping ceil-{one,two,three.four}.dev` does not, reestablish the (WiFi) connection of your workstation
 - If you want to play with the traffic lights mounted on top of the router: `make router-traffic`
+- The last step of the router setup is building [PiWatch](https://github.com/helmuthva/piwatch) which takes ca. 15 minutes
 
 ## Setup K8S and execute all deployments
 
