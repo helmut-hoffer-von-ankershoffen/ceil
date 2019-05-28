@@ -2,6 +2,7 @@
   serial: 2
   roles:
     - nodes
+    - registry-mirror
 
 - hosts: master
   roles:

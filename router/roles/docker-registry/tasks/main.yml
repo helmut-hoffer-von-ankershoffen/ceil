@@ -1,0 +1,55 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Install packages"
+  apt:
+    state: latest
+    pkg:
+      - docker-ce
+  register: install
+
+- name: "Create config directory"
+  become: true
+  file:
+    state: directory
+    path: "{{ docker_registry_host_conf_directory }}"
+    mode: '0755'
+
+- name: "Create var directory"
+  become: true
+  file:
+    state: directory
+    path: "{{ docker_registry_host_var_directory }}"
+    mode: '0777'
+
+- name: "Render config"
+  template:
+    src: config.yml.j2
+    dest: "{{ docker_registry_host_conf_file }}"
+
+- name: "Run container"
+  docker_container:
+    name: "{{ docker_registry_name }}"
+    image: "{{ docker_registry_image }}"
+    exposed_ports: "{{ docker_registry_exposed_ports }}"
+    published_ports: "{{ docker_registry_ports }}"
+    volumes: "{{ docker_registry_volumes }}"
+    memory: "{{ docker_registry_memory }}"
+    log_driver: "{{ docker_registry_log_driver }}"
+    log_options: "{{ docker_registry_log_options }}"
+    pull: true
+    restart_policy: always
+    restart: true
+    state: started
+
+- name: "Allow Docker registry port in firewall"
+  ufw:
+    direction: in
+    port: '5000'
+    proto: tcp
+    rule: allow
+    state: enabled

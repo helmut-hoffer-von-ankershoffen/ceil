@@ -1,0 +1,29 @@
+---
+
+docker_registry_host_conf_directory: "/etc/docker-registry"
+docker_registry_host_conf_file: "{{ docker_registry_host_conf_directory }}/config.yml"
+
+docker_registry_host_var_directory: "/mnt/thumb/volumes/docker-registry"
+docker_registry_container_var_directory: "/var/lib/registry"
+
+docker_registry_name: docker-registry
+docker_registry_image: registry:2
+
+docker_registry_exposed_ports:
+  - "5000"
+docker_registry_ports:
+  - "5000:5000"
+
+docker_registry_directory_volumes:
+  - "{{ docker_registry_host_var_directory }}:{{docker_registry_container_var_directory }}:rw"
+docker_registry_config_volumes:
+  - "{{ docker_registry_host_conf_file }}:/etc/docker/registry/config.yml:ro"
+docker_registry_volumes: "{{ docker_registry_directory_volumes + docker_registry_config_volumes }}"
+
+docker_registry_memory: 256MB
+
+docker_registry_log_driver: syslog
+docker_registry_log_options:
+  syslog-facility: local0
+  tag: "{{ docker_registry_name }}"
+

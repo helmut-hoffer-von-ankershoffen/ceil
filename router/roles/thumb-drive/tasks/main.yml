@@ -1,0 +1,45 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Stop docker"
+  service:
+    name: docker
+    state: stopped
+
+- name: "Unmount"
+  mount:
+    path: /mnt/thumb
+    src: /dev/sda1
+    fstype: ext4
+    state: unmounted
+
+- name: "Wipe signature and partitions"
+  command: >
+    wipefs --all --force /dev/sda
+
+- name: "Partition"
+  parted:
+    device: /dev/sda
+    number: 1
+    state: present
+
+- name: "Create a ext4 filesystem"
+  filesystem:
+    fstype: ext4
+    dev: /dev/sda1
+
+- name: "Mount"
+  mount:
+    path: /mnt/thumb
+    src: /dev/sda1
+    fstype: ext4
+    state: mounted
+
+- name: "Start docker"
+  service:
+    name: docker
+    state: started
