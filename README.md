@@ -51,7 +51,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 
 - [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
 - [x] Deploy kubewatch to push K8S events to arbitrary webhook
-- [ ] Build dockerized Python/Flask based webapp triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
+- [x] Build dockerized Python/FastAPI (ASGI) based webapp [PiWatch](https://github.com/helmuthva/piwatch) triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
+- [ ] Refine `PiWatch` to react more fine granular to specific K8S events
 
 ### Phase 5: Auto-Scaling
 - [ ] podinfo

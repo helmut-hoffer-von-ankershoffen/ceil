@@ -3,16 +3,34 @@
     that:
       - ansible_play_hosts == ansible_play_hosts_all
 
-- name: "Install packages"
-  apt:
-    state: latest
-    pkg:
-      - python-pip
-      - python-dev
-      - virtualenv
-      - python-rpi.gpio
-  register: install
+- name: "Clone repository"
+  git:
+    repo: 'https://github.com/helmuthva/piwatch.git'
+    dest: /home/admin/PiWatch
+    version: master
 
-- name: "Install libs"
-  pip:
-    name: flask
+- name: "Build image"
+  docker_image:
+    build:
+      path: /home/admin/PiWatch
+    name: helmuthva/piwatch
+    tag: latest
+    push: no
+    source: build
+
+- name: "Run container"
+  docker_container:
+    name: piwatch
+    image: helmuthva/piwatch
+    exposed_ports:
+      - "80"
+    published_ports:
+      - "80:80"
+    privileged: true
+    devices:
+      - "/dev/mem"
+    pull: false
+    recreate: true
+    restart: true
+    restart_policy: always
+    state: started
