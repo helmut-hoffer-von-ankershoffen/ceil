@@ -22,8 +22,6 @@
   docker_container:
     name: piwatch
     image: helmuthva/piwatch
-    exposed_ports:
-      - "80"
     published_ports:
       - "80:80"
     privileged: true

@@ -1,11 +1,11 @@
 - hosts: all
   roles:
-#    - base
-#    - thumb-drive
-#    - routing
-#    - vpn
-#    - ddns
-#    - gpio
-#    - firewall
+    - base
+    - thumb-drive
+    - routing
+    - vpn
+    - ddns
+    - gpio
+    - firewall
     - docker-registry
     - PiWatch
