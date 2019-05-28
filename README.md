@@ -2,6 +2,8 @@
 
 Enter `make help` to see available commands.
 
+Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of this the ceil cluster - flowers to mlande for gifting the name.
+
 ## Goals
 
 * Setup auto-provisioned RPi cluster running K8S on bare-metal behind a RPi acting as a router
