@@ -43,7 +43,7 @@ Enter `make help` to see available commands.
 - [x] Act as VPN server using OpenVPN
 - [x] Dynamically update domain vpn.ceil.pro (or similar) using ddclient and Cloudflare v4 API
 - [x] Raise Firewall using ufw
-- [ ] Act as Docker registry cache
+- [x] Act as Docker registry cache using official docker image `registry:2`
 
 ### Phase 4: Scaling
 - [ ] podinfo
@@ -128,7 +128,9 @@ Enter `make help` to see available commands.
 1) Prepare you workstation by installing Ansible, kubectl, helm etc. using homebrew: `make prepare-mac`
 2) Pull the hypriot image (which is not stored  in GitHub): `make pull-image`
 3) Flash RPIs (insert SD cards in your workstation): `make {router,one,two,three,four}-provision`
-4) Start RPIs (insert SD cards first) by plugging in the USB charger
+4) Insert SD cards into slots of respective RPIs
+5) Insert thumb drives into USB ports of RPIs
+6) Start RPIs by plugging in the USB charger
 
 ## Setup router
 
@@ -140,6 +142,7 @@ Enter `make help` to see available commands.
 6) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
 
 Notes:
+- Danger: wipes thumb drive in router
 - It might take some time until the Zeroconf/Avahi distributed the name `ceil-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
 - The router will manage / route to the subnet `11.0.0.[0-128]` (`11/25`) the K8S nodes will life in and act as their DHCP and DNS server
 - Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.ceil.pro` via DDNS
@@ -151,8 +154,7 @@ Notes:
 
 ## Setup K8S and execute all deployments
 
-1) Insert thumb drives in the USB ports of your GlusterFS RPIs (`ceil-two` to `ceil-four`) 
-2) Execute `make setup` to setup K8S inc. persistence and deploy everything at once - takes ca. 45 minutes. 
+1) Execute `make setup` to setup K8S inc. persistence and deploy everything at once - takes ca. 45 minutes. 
 
 Notes:
 - `ceil-one` is set up as k8s master
@@ -178,8 +180,7 @@ Notes:
 
 ## Setup K8S inc. persistence and helm/tiller
 
-1) Insert thumb drives in the USB ports of your GlusterFS RPIs (`ceil-two` to `ceil-four`) 
-2) Setup K8S cluster inc. persistence via GlusterFS+Heketi and helm/tiller for later deployments: `make k8s-setup`. 
+1) Setup K8S cluster inc. persistence via GlusterFS+Heketi and helm/tiller for later deployments: `make k8s-setup`. 
 
 Notes:
 - `ceil-one` is set up as k8s master
@@ -213,7 +214,7 @@ Notes:
 * Some services do not yet compile docker images for ARM and/or do not use docker manifest lists properly => google for alternative images or wait for CNCF
 * Mosts ansible playbooks do not provide a teardown role => build yourself
 
-## Material
+## Additional references
 
 * https://medium.com/@evnsio/managing-my-home-with-kubernetes-traefik-and-raspberry-pis-d0330effea9a (ddns, vpn, let's encrypt)
 * https://github.com/luxas/kubeadm-workshop (custom autoscaling, by luxas)

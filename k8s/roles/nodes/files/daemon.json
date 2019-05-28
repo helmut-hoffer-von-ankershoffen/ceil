@@ -1,0 +1,6 @@
+{
+  "labels": [ "os=linux", "arch=arm64" ],
+  "registry-mirrors": ["http://11.0.0.1:5000"],
+  "insecure-registries": ["11.0.0.1:5000"],
+  "experimental": true
+}

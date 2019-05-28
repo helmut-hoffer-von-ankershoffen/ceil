@@ -132,6 +132,17 @@
     - kubernetes-cni
   ignore_errors: yes
 
+- name: "Update /etc/docker/daemon.json to use docker-registry mirror on router"
+  become: true
+  copy:
+    src: daemon.json
+    dest: /etc/docker/daemon.json
+
+- name: "Restart docker"
+  service:
+    name: docker
+    state: restarted
+
 - name: "kubeadmn config images pull"
   shell: kubeadm config images pull --kubernetes-version={{ kubernetes_version }}
 
