@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-kubectl delete namespace ngrok || true
+kubectl delete -f httpd.yaml || true
