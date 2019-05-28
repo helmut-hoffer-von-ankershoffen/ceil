@@ -69,6 +69,9 @@ router-workstation-route-add: ## Add route to workstation to route to subnet
 router-traffic: ## Simulate traffic
 	cd router && ansible-playbook traffic.yml
 
+router-piwatch: ## Build, push  and run PiWatch
+	cd router && ansible-playbook piwatch.yml
+
 one-ssh: ## ssh to one
 	ssh admin@ceil-one.dev
 

@@ -8,3 +8,4 @@
     - gpio
     - firewall
     - docker-registry
+    - PiWatch

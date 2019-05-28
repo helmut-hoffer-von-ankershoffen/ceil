@@ -51,7 +51,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 
 - [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
 - [x] Deploy kubewatch to push K8S events to arbitrary webhook
-- [ ] Build dockerized Python/Flask based webapp triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
+- [x] Build dockerized Python/FastAPI (ASGI) based webapp [PiWatch](https://github.com/helmuthva/piwatch) triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
+- [ ] Refine `PiWatch` to react more fine granular to specific K8S events
 
 ### Phase 5: Auto-Scaling
 - [ ] podinfo
@@ -156,6 +157,7 @@ Notes:
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
 - If on your workstation `nslookup ceil-{one,two,three.four}.dev` works but `ping ceil-{one,two,three.four}.dev` does not, reestablish the (WiFi) connection of your workstation
 - If you want to play with the traffic lights mounted on top of the router: `make router-traffic`
+- The last step of the router setup is building [PiWatch](https://github.com/helmuthva/piwatch) which takes ca. 15 minutes for the 1st build
 
 ## Setup K8S and execute all deployments
 

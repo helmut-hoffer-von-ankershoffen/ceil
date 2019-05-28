@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubewatch
+  namespace: default
+spec:
+  containers:
+    - image: tpageforfunzies/kubewatcharmhf:v1
+      imagePullPolicy: Always
+      name: kubewatch
+      volumeMounts:
+        - name: config-volume
+          mountPath: /root
+      env:
+        - name: SLACK_TOKEN
+          value: ''
+        - name: SLACK_CHANNEL
+          value: ''
+        - name: KW_SLACK_TOKEN
+          value: ''
+        - name: KW_WEBHOOK_URL
+          value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
+        - name: WEBHOOK_URL
+          value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
+    - image: baykonur/kubectl-proxy-rpi:latest
+      args:
+        - proxy
+        - "-p"
+        - "8080"
+      name: proxy
+      imagePullPolicy: Always
+  restartPolicy: Always
+  serviceAccountName: kubewatch
+  volumes:
+    - name: config-volume
+      configMap:
+        name: kubewatch
