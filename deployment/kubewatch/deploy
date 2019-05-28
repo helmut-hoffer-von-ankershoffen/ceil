@@ -2,4 +2,6 @@
 
 cd "$(dirname "$0")"
 
-helm install stable/kubewatch --name kubewatch -f values.yaml
+kubectl apply -f kubewatch-service-account.yaml
+kubectl apply -f kubewatch-configmap.yaml
+kubectl apply -f kubewatch.yaml

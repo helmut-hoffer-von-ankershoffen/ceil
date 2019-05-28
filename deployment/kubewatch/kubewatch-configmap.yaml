@@ -1,0 +1,32 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kubewatch
+data:
+  .kubewatch.yaml: |
+    namespace: ""
+    handler:
+      webhook:
+        url: "http://ceil-router.dev/traffic/kubewatch-webhook"
+      slack:
+        token: ""
+        channel: ""
+      hipchat:
+        token: ""
+        room: ""
+        url: ""
+      mattermost:
+        channel: ""
+        url: ""
+        username: ""
+      flock:
+        url: ""
+    resource:
+      deployment: true
+      replicationcontroller: true
+      replicaset: true
+      daemonset: true
+      services: true
+      pod: true
+      secret: false
+      configmap: false

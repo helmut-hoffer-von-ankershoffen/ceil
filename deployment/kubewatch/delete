@@ -2,4 +2,6 @@
 
 cd "$(dirname "$0")"
 
-helm delete --purge kubewatch || true
+kubectl delete -f kubewatch.yaml || true
+kubectl delete -f kubewatch-configmap.yaml || true
+kubectl delete -f kubewatch-service-account.yaml || true
