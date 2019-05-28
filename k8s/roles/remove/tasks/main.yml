@@ -20,7 +20,7 @@
 
 - name: "Sleep"
   delegate_to: localhost
-  shell: sleep 30
+  shell: sleep 120
   sudo: false
 
 - name: "Wait for up"

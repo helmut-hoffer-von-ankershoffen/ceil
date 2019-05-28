@@ -9,7 +9,7 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 * Setup auto-provisioned RPi cluster running K8S on bare-metal behind a RPi acting as a router
 * PHP/SF4 stack on cluster supporting scaling, progressive deployments and a/b testing
 * Educate myself on Ansible + RPi + K8S + GitOps for CI/CD/PD from bottom to top
-* Refresh knowledge regarding networking
+* Refresh knowledge regarding networking and Python
 
 ## Tasks
 
@@ -47,43 +47,44 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Raise Firewall using ufw
 - [x] Act as Docker registry cache using official docker image `registry:2`
 
-### Phase 4: Scaling
+### Phase 4: Traffic lights
+
+- [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
+- [x] Deploy kubewatch to push K8S events to arbitrary webhook
+- [ ] Build dockerized Python/Flask based webapp triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
+
+### Phase 5: Auto-Scaling
 - [ ] podinfo
 - [ ] ngrok
 - [ ] Autoscaling using HPA and custom metrics
 - [ ] Zero-Scaling using Osiris
 - [ ] Relevant dashboards in grafana
 
-### Phase 5: Mesh-Networking (waiting for ARM images from CNCF et al)
+### Phase 6: Mesh-Networking (waiting for ARM images from CNCF et al)
 - [ ] Istio for Mesh-Networking
 - [ ] Visibility tools
 - [ ] Additional tools
 
-### Phase 6: GitOps and Progressive Delivery (waiting for ARM images from CNCF et al)
+### Phase 7: GitOps and Progressive Delivery (waiting for ARM images from CNCF et al)
 
 - [ ] Flagger for Helm using mesh network
 - [ ] Canary deployments using mesh network
 - [ ] ...
 
-### Phase 7: CI and emphemeral test environments (waiting for ARM images from CNCF et al)
+### Phase 8: CI and emphemeral test environments (waiting for ARM images from CNCF et al)
 - [ ] Setup CI using JenkinsX
 - [ ] ...
 
-### Phase 8: PHP/Symfony4 stack and CI
+### Phase 9: PHP/Symfony4 stack and CI
 
 - [ ] Prepare PHP/Symfony4 stack for ceil / K8S
 - [ ] Prepare ceil / K8S for PHP/Symfony4 stack
 - [ ] Deploy PHP/Symfony4 stack on ceil
 
-### Phase 9: A/B testing (waiting for ARM images from CNCF et al)
+### Phase 10: A/B testing (waiting for ARM images from CNCF et al)
 
 - [ ] Using mesh network
 - [ ] ...
-
-### Phase 10: Traffic lights
-
-- [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
-- [ ] Use PiTraffic as audiovisual event handler for K8S using KubeWatch
 
 ### Phase 11: Sharing is caring
 
@@ -107,6 +108,7 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
   * Rack: transparent
   * Networking: 5-port GBit/s switch + WiFi router connected to router
   * Power: 6-port USB charger powering switch and RPIs
+  * 4-dir traffic lights with beeper and button: [PiTraffic](https://sb-components.co.uk/pi-traffic.html)
 * Software
   * OS: Debian, Hypriot distribution
   * Networking for router: iptables, dhcpcd, dnsmasq, OpenVPN, ddclient, CloudFlare
@@ -119,6 +121,7 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
   * Loadbalancer: MetaLB
   * Deployments: helm
   * Monitoring and Dashboarding: prometheus, grafana
+  * Traffic lights: kubewatch, Python, Flask, PiTraffic, RPi.GPIO
 
 ## Install this repository
 

@@ -14,6 +14,7 @@
     - workers
 
 - hosts: all
+  serial: 1
   roles:
   - gluster-heketi
 

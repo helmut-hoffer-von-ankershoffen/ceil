@@ -55,6 +55,34 @@
     rule: allow
     state: enabled
 
+- name: "Allow HTTP"
+  ufw:
+    direction: in
+    port: http
+    rule: allow
+    state: enabled
+
+- name: "Allow HTTPS"
+  ufw:
+    direction: in
+    port: https
+    rule: allow
+    state: enabled
+
+- name: "Allow LLMNR"
+  ufw:
+    direction: in
+    port: '5355'
+    proto: udp
+    rule: allow
+    state: enabled
+
+- name: "Allow IGMP"
+  ufw:
+    proto: igmp
+    rule: allow
+    state: enabled
+
 - name: "Set defaults to deny all incoming"
   ufw:
     direction: incoming

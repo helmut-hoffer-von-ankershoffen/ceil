@@ -79,6 +79,7 @@
     - software-properties-common
     - ipvsadm
     - docker-ce
+    - dnsutils
 
 - name: "Reboot"
   shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
@@ -98,7 +99,7 @@
 
 - name: "Sleep"
   delegate_to: localhost
-  shell: sleep 30
+  shell: sleep 120
   sudo: false
   when: rebooted.changed
 
@@ -143,8 +144,14 @@
     name: docker
     state: restarted
 
+- name: "Sleep"
+  delegate_to: localhost
+  shell: sleep 120
+  sudo: false
+
 - name: "kubeadmn config images pull"
   shell: kubeadm config images pull --kubernetes-version={{ kubernetes_version }}
+  become: true
 
 - name: "Reset K8S"
   shell: kubeadm reset -f
