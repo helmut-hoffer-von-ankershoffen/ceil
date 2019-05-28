@@ -22,7 +22,6 @@
   delegate_to: localhost
   shell: sleep 30
   sudo: false
-  when: rebooted.changed
 
 - name: "Wait for up"
   wait_for_connection:
