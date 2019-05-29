@@ -152,13 +152,14 @@ Notes:
 - Danger: wipes thumb drive in router
 - It might take some time until the Zeroconf/Avahi distributed the name `ceil-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
 - The router will manage / route to the subnet `11.0.0.[0-128]` (`11/25`) the K8S nodes will life in and act as their DHCP and DNS server
+- Setting up the router triggers adding a route on our workstation to use `192.168.0.100` as gatewway for the subnet `11.0.0.[0-128]`
 - Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.ceil.pro` via DDNS
-- Setting up services on the router triggers adding a route on our workstation to use `192.168.0.100` as gatewway for the subnet `11.0.0.[0-128]`
-- After setting up services on the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
+- After setting up the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
 - If on your workstation `nslookup ceil-{one,two,three.four}.dev` works but `ping ceil-{one,two,three.four}.dev` does not, reestablish the (WiFi) connection of your workstation
 - If you want to play with the traffic lights mounted on top of the router: `make router-traffic`
 - The last step of the router setup is building [PiWatch](https://github.com/helmuthva/piwatch) which takes ca. 15 minutes for the 1st build
+- Last but not least the router provides a docker registry mirror and private docker registry consumed by the K8S nodes
 
 ## Setup K8S and execute all deployments
 
