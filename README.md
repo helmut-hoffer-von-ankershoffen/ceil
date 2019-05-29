@@ -46,41 +46,41 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Dynamically update domain vpn.ceil.pro (or similar) using ddclient and Cloudflare v4 API
 - [x] Raise Firewall using ufw
 - [x] Act as Docker registry cache using official docker image `registry:2`
+- [ ] ngrok
 
-### Phase 4: Traffic lights
+### Phase 4: PiWatch
 
 - [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
 - [x] Deploy kubewatch to push K8S events to arbitrary webhook
 - [x] Build dockerized Python/FastAPI (ASGI) based webapp [PiWatch](https://github.com/helmuthva/piwatch) triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
 - [ ] Refine `PiWatch` to react more fine granular to specific K8S events
 
-### Phase 5: Auto-Scaling
-- [ ] podinfo
-- [ ] ngrok
+### Phase 5: PHP/Symfony4 stack and CI
+
+- [ ] Prepare dockerized PHP/Symfony4 stack and build-chain for manual builds on RPi
+- [ ] Enhance PHP/Symfony4 stack for K8S (introspection, healthz, metrics etc.) with podinfo as a blueprints
+- [ ] Prepare CI for said stack including ats
+
+### Phase 6: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics
 - [ ] Zero-Scaling using Osiris
 - [ ] Relevant dashboards in grafana
 
-### Phase 6: Mesh-Networking (waiting for ARM images from CNCF et al)
+### Phase 7: Mesh-Networking (waiting for ARM images from CNCF et al)
 - [ ] Istio for Mesh-Networking
 - [ ] Visibility tools
 - [ ] Additional tools
 
-### Phase 7: GitOps and Progressive Delivery (waiting for ARM images from CNCF et al)
+### Phase 8: GitOps and Progressive Delivery (waiting for ARM images from CNCF et al)
 
 - [ ] Flagger for Helm using mesh network
 - [ ] Canary deployments using mesh network
 - [ ] ...
 
-### Phase 8: CI and emphemeral test environments (waiting for ARM images from CNCF et al)
+### Phase 9: CI and emphemeral test environments (waiting for ARM images from CNCF et al)
 - [ ] Setup CI using JenkinsX
 - [ ] ...
 
-### Phase 9: PHP/Symfony4 stack and CI
-
-- [ ] Prepare PHP/Symfony4 stack for ceil / K8S
-- [ ] Prepare ceil / K8S for PHP/Symfony4 stack
-- [ ] Deploy PHP/Symfony4 stack on ceil
 
 ### Phase 10: A/B testing (waiting for ARM images from CNCF et al)
 
