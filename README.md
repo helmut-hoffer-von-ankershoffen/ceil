@@ -7,9 +7,9 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 ## Goals
 
 * Setup auto-provisioned RPi cluster running K8S on bare-metal behind a RPi acting as a router
-* PHP/SF4 stack on cluster supporting scaling, progressive deployments and a/b testing
 * Educate myself on Ansible + RPi + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
+* Enhanced PHP/SF4 stack on cluster supporting HPA, progressive deployments and a/b testing
 
 ## Tasks
 
