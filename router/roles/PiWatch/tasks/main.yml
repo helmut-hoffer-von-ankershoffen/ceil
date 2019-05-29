@@ -13,15 +13,17 @@
   docker_image:
     build:
       path: /home/admin/PiWatch
+      pull: no
     name: helmuthva/piwatch
     tag: latest
+    force_source: yes
     push: no
     source: build
 
 - name: "Run container"
   docker_container:
     name: piwatch
-    image: helmuthva/piwatch
+    image: helmuthva/piwatch:latest
     published_ports:
       - "80:80"
     privileged: true
