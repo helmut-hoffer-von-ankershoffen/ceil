@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-kubectl delete -f deployment.yaml || true
+helm delete --purge piphp || true

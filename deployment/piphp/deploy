@@ -2,4 +2,5 @@
 
 cd "$(dirname "$0")"
 
-kubectl apply -f deployment.yaml
+helm repo add helmuthva https://helmuthva.github.io/helm
+helm install helmuthva/piphp

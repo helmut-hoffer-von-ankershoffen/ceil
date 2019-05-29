@@ -1,6 +1,6 @@
 {
   "labels": [ "os=linux", "arch=arm64" ],
-  "registry-mirrors": ["http://11.0.0.1:5000"],
-  "insecure-registries": ["11.0.0.1:5000","11.0.0.1:5001"],
+  "registry-mirrors": ["http://ceil-router.dev:5000"],
+  "insecure-registries": ["ceil-router.dev:5000","ceil-router.dev:5001"],
   "experimental": true
 }
