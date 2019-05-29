@@ -59,7 +59,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 ### Phase 5: PiPHP
 
 - [x] Deploy custom built base image [arm32v7-docker-php-apache](https://github.com/helmuthva/arm32v7-docker-php-apache) to k8s from private registry provided by router // Further progress of base image tracked there
-- [ ] Prepare simple SF4 based app using said base image
+- [ ] Prepare helm chart hosted on ghpage and redeploy
+- [ ] Prepare simple dockerized SF4 app using said image as base
 - [ ] Enhance app for K8S (introspection, healthz, metrics etc.) with podinfo as a blueprint
 
 ### Phase 6: Auto-Scaling
