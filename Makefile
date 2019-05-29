@@ -69,8 +69,14 @@ router-workstation-route-add: ## Add route to workstation to route to subnet
 router-traffic: ## Simulate traffic
 	cd router && ansible-playbook traffic.yml
 
-router-piwatch: ## Build, push  and run PiWatch
+router-piwatch-update: ## Build, push and run PiWatch
 	cd router && ansible-playbook piwatch.yml
+
+router-piwatch-webhook-trigger: ## Trigger PiWatch webhook
+	python -mwebbrowser http://192.168.0.100/traffic/kubewatch-webhook
+
+router-piwatch-docs-open: ## Open OAS3 docs of PiWatch
+	python -mwebbrowser http:/192.168.0.100/docs
 
 one-ssh: ## ssh to one
 	ssh admin@ceil-one.dev
