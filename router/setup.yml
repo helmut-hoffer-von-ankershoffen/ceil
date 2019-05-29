@@ -7,5 +7,6 @@
     - ddns
     - gpio
     - firewall
-    - docker-registry
+    - docker-registry-mirror
+    - docker-registry-private
     - PiWatch

@@ -45,7 +45,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Act as VPN server using OpenVPN
 - [x] Dynamically update domain vpn.ceil.pro (or similar) using ddclient and Cloudflare v4 API
 - [x] Raise Firewall using ufw
-- [x] Act as Docker registry cache using official docker image `registry:2`
+- [x] Act as Docker registry mirror using official docker image `registry:2`
+- [x] Act as private Docker registry
 - [ ] ngrok
 
 ### Phase 4: PiWatch
@@ -55,11 +56,11 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Build dockerized Python/FastAPI (ASGI) based webapp [PiWatch](https://github.com/helmuthva/piwatch) triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
 - [ ] Refine `PiWatch` to react more fine granular to specific K8S events
 
-### Phase 5: PHP/Symfony4 stack and CI
+### Phase 5: PiPHP
 
-- [ ] Prepare dockerized PHP/Symfony4 stack and build-chain for manual builds on RPi
-- [ ] Enhance PHP/Symfony4 stack for K8S (introspection, healthz, metrics etc.) with podinfo as a blueprints
-- [ ] Prepare CI for said stack including ats
+- [x] Deploy custom built base image [arm32v7-docker-php-apache](https://github.com/helmuthva/arm32v7-docker-php-apache) to k8s from private registry provided by router // Further progress of base image tracked there
+- [ ] Prepare simple SF4 based app using said base image
+- [ ] Enhance app for K8S (introspection, healthz, metrics etc.) with podinfo as a blueprint
 
 ### Phase 6: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics

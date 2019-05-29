@@ -1,12 +1,12 @@
 ---
 
-docker_registry_host_conf_directory: "/etc/docker-registry"
+docker_registry_host_conf_directory: "/etc/docker-registry-mirror"
 docker_registry_host_conf_file: "{{ docker_registry_host_conf_directory }}/config.yml"
 
-docker_registry_host_var_directory: "/mnt/thumb/volumes/docker-registry"
+docker_registry_host_var_directory: "/mnt/thumb/volumes/docker-registry-mirror"
 docker_registry_container_var_directory: "/var/lib/registry"
 
-docker_registry_name: docker-registry
+docker_registry_name: docker-registry-mirror
 docker_registry_image: registry:2
 
 docker_registry_exposed_ports:

@@ -224,6 +224,12 @@ ngrok-status: ## Show ngrok status
 ngrok-delete: ## Delete ngrok
 	deployment/ngrok/delete
 
+piphp-deploy: ## Deploy piphp
+	deployment/piphp/deploy
+
+piphp-delete: ## Delete piphp
+	deployment/piphp/delete
+
 all-deploy: metalb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
 
 all-delete: ngrok-delete podinfo-delete kubewatch-deploy grafana-delete prometheus-delete httpd-delete traefik-delete metalb-delete ## Delete all deployments
