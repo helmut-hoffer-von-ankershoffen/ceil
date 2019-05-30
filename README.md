@@ -61,7 +61,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Deploy custom built base image [arm32v7-docker-php-apache](https://github.com/helmuthva/arm32v7-docker-php-apache) to k8s from private registry provided by router. Further progress of the base image tracked in respective repository.
 - [x] Prepare [Helmuts Helm Chart Repository](https://helmuthva.github.com/helm) hosted on ghpages.
 - [x] Prepare [PiPHP](https://helmuthva.github.com/piphp) docker image based on said base image inc. helm chart and redeploy. Further progress of said app tracked in said repository.
-- [ ] Automate CI/CD workflow with GitHub Actions or similar.
+- [x] Automate build->deploy workflow inc. helming locally.
+- [ ] Automate full CI/CD workflow with GitHub Actions or similar.
 
 ### Phase 6: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics
