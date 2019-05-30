@@ -94,6 +94,7 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 
 - [x] Open source under GPlv3
 - [x] Links to useful material for further studies
+- [ ] GitHub Page
 - [ ] Prepare interactive install script automating the step to manually copy and edit `.tpl` files
 - [ ] Write a series of blog posts
 - [ ] Prepare a workshop presentation
