@@ -3,4 +3,4 @@
 cd "$(dirname "$0")"
 
 helm repo add helmuthva https://helmuthva.github.io/helm
-helm install helmuthva/piphp
+helm install helmuthva/piphp --name piphp
