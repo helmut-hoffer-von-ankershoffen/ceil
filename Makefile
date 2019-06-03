@@ -78,6 +78,12 @@ router-piwatch-webhook-trigger: ## Trigger PiWatch webhook
 router-piwatch-docs-open: ## Open OAS3 docs of PiWatch
 	python -mwebbrowser http:/192.168.0.100/docs
 
+make route-add: ## Add route to subnet
+	router/scripts/route-to-subnet
+
+make route-del: ## Delete route to subnet (use when connecting via vpn)
+	router/scripts/route-to-subnet-delete
+
 one-ssh: ## ssh to one
 	ssh admin@ceil-one.dev
 

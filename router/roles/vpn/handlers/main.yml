@@ -5,7 +5,7 @@
   service:
     name: openvpn@server
     state: restarted
-  when: easyrsaconfig.changed
+  when: easyrsaconfig.changed or openvpn_config.changed
 
 - name: "restart networking"
   service:

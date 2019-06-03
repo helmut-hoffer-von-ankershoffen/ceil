@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+sudo route -n delete -net 11/25 192.168.0.100

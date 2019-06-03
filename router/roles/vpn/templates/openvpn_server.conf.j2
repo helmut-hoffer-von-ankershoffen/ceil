@@ -14,7 +14,8 @@ push "route {{ openvpn.server_tun0 }} 255.255.255.255"
 # Add route to Client routing table for the OpenVPN Subnet 
 push "route {{ openvpn.server_subnet }} {{ openvpn.server_netmask }}" 
 # your local subnet 
-push "route {{ ansible_default_ipv4.address }} {{ openvpn.local_netmask }}"
+push "route {{ openvpn.local_subnet }} {{ openvpn.local_netmask }}"
+#push "route {{ ansible_default_ipv4.address }} {{ openvpn.local_netmask }}"
 # Set primary domain name server address to the SOHO Router 
 # If your router does not do DNS, you can use Google DNS 8.8.8.8 
 push "dhcp-option DNS {{ openvpn.dns_ip }}"

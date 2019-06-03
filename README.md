@@ -47,6 +47,7 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Raise Firewall using ufw
 - [x] Act as Docker registry mirror using official docker image `registry:2`
 - [x] Act as private Docker registry
+- [ ] kail and harbor
 - [ ] ngrok
 
 ### Phase 4: PiWatch

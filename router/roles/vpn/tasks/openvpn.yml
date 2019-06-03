@@ -19,6 +19,7 @@
     mode: 0644
     owner: root
     group: root
+  register: openvpn_config
   notify: restart openvpn
 
 - name: "Ensure sysctl net.ipv4.ip_forward is set to 1"

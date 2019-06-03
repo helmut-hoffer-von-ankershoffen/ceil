@@ -1,12 +1,12 @@
 - hosts: all
   roles:
-    - base
-    - thumb-drive
-    - routing
+    #- base
+    #- thumb-drive
+    #- routing
     - vpn
-    - ddns
-    - gpio
-    - firewall
-    - docker-registry-mirror
-    - docker-registry-private
-    - PiWatch
+    #- ddns
+    #- gpio
+    #- firewall
+    #- docker-registry-mirror
+    #- docker-registry-private
+    #- PiWatch
