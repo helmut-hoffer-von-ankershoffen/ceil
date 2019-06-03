@@ -156,7 +156,7 @@ Notes:
 - Danger: wipes thumb drive in router
 - It might take some time until the Zeroconf/Avahi distributed the name `ceil-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
 - The router will manage / route to the subnet `11.0.0.[0-128]` (`11/25`) the K8S nodes will life in and act as their DHCP and DNS server
-- Setting up the router triggers adding a route on our workstation to use `192.168.0.100` as gatewway for the subnet `11.0.0.[0-128]`
+- Setting up the router triggers adding a route on our workstation to use `192.168.0.100` as gatewway for the subnet `11.0.0.[0-128]`. Alternatively use `make route-del` and set up a static route to `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router.
 - Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.ceil.pro` via DDNS
 - After setting up the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
