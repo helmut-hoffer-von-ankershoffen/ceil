@@ -45,6 +45,12 @@ three-provision: ## Provision ks8 node three for boot (flash SD card with OS)
 four-provision: ## Provision ks8 node four for boot (flash SD card with OS)
 	host/provision/four
 
+workstation-route-add: ## Add route to k8s subnet via router
+	router/scripts/route-to-subnet
+
+workstation-route-del: ## Delete route to k8s subnet
+	router/scripts/route-to-subnet-delete
+
 router-ssh: ## ssh to router
 	ssh admin@ceil-router.local
 
@@ -60,11 +66,8 @@ router-reboot: ## Reboot ceil-router
 router-check-ip: ## Check IP addresss of router
 	cd router && ansible -a "hostname --ip" all
 
-router-setup: router-workstation-route-add ## Setup router, .ovpn file will be downloaded into router/out
+router-setup: ## Setup router, .ovpn file will be downloaded into router/out
 	cd router && ansible-playbook setup.yml
-
-router-workstation-route-add: ## Add route to workstation to route to subnet
-	router/scripts/route-to-subnet
 
 router-traffic: ## Simulate traffic
 	cd router && ansible-playbook traffic.yml
@@ -77,12 +80,6 @@ router-piwatch-webhook-trigger: ## Trigger PiWatch webhook
 
 router-piwatch-docs-open: ## Open OAS3 docs of PiWatch
 	python -mwebbrowser http:/192.168.0.100/docs
-
-route-add: ## Add route to subnet
-	router/scripts/route-to-subnet
-
-route-del: ## Delete route to subnet (use when connecting via vpn)
-	router/scripts/route-to-subnet-delete
 
 one-ssh: ## ssh to one
 	ssh admin@ceil-one.dev

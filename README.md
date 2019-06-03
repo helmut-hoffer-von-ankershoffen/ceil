@@ -146,17 +146,17 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 ## Setup router
 
 1) Make a DHCP reservation for `ceil-router` on your home or company WiFi router with IP address `192.168.0.100` -  it will register as `ceil-router` at your WiFi router
-2) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
-3) Check via `make router-check-ip` if the IP address has been picked up
-4) Setup networking services on router using `make router-setup`
-5) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
-6) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
+2) Set up a static route to the k8s subnet `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
+3) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
+4) Check via `make router-check-ip` if the IP address has been picked up
+5) Setup networking services on router using `make router-setup`
+6) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
+7) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
 
 Notes:
 - Danger: wipes thumb drive in router
 - It might take some time until the Zeroconf/Avahi distributed the name `ceil-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
 - The router will manage / route to the subnet `11.0.0.[0-128]` (`11/25`) the K8S nodes will life in and act as their DHCP and DNS server
-- Setting up the router triggers adding a route on our workstation to use `192.168.0.100` as gatewway for the subnet `11.0.0.[0-128]`. Alternatively use `make route-del` and set up a static route to `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router.
 - Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.ceil.pro` via DDNS
 - After setting up the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
