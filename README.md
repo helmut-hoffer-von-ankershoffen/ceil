@@ -1,13 +1,11 @@
-# `ceil`: Auto-provisioned RPi cluster running K8S on bare-metal
+# `max`: Auto-provisioned RPi cluster running amd64 on bare-metal
 
 Enter `make help` to see available commands.
 
-Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the ceil cluster - flowers to mlande for gifting the name.
-
 ## Goals
 
-* Setup auto-provisioned RPi cluster running K8S on bare-metal behind a RPi acting as a router
-* Educate myself on Ansible + RPi + K8S + GitOps for CI/CD/PD from bottom to top
+* Setup auto-provisioned amd64 cluster running K8S on bare-metal inc. router
+* Educate myself on Ansible + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
 * Enhanced PHP/SF4 stack for K8S supporting HPA, progressive deployments and a/b testing
 
@@ -15,17 +13,14 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 
 ### Phase 0: Hardware
 
-![alt text](https://raw.githubusercontent.com/helmuthva/ceil/master/doc/assets/ceil.jpg "Ceil Rack")
-
-- [x] Wire up RPi rack and accessories
+- [x] Wire up three gigabyte bace 3160 and accessories
 
 ### Phase 1: Foundation
 
 - [x] Central CloudOps entrypoint is `make`
-- [x] Flashing of RPis and automatic provisioning with pre-configured base OS
 - [x] Setup and teardown of all steps individually
 - [x] Setup and teardown in one step
-- [x] Setup of k8s cluster on RPis using Ansible inc. weave networking and k8s dashboard
+- [x] Setup of k8s cluster on amd64 using Ansible inc. weave networking and k8s dashboard
 - [x] Helm/tiller for additional deployments
 - [x] Traefik as ingress inc. Traefik dashboard
 - [x] busybox-http using Traefik as ingress for demos
@@ -43,27 +38,12 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 - [x] Act as DHCP & DNS server for K8S subnet using dnsmasq
 - [x] Act as gateway from wlan0 (WiFi) to eth0 (K8S subnet) using iptables
 - [x] Act as VPN server using OpenVPN
-- [x] Dynamically update domain vpn.ceil.pro (or similar) using ddclient and Cloudflare v4 API
+- [x] Dynamically update domain vpn.maxxx.pro (or similar) using ddclient and Cloudflare v4 API
 - [x] Raise Firewall using ufw
 - [x] Act as Docker registry mirror using official docker image `registry:2`
 - [x] Act as private Docker registry
 - [ ] kail and harbor
 - [ ] ngrok
-
-### Phase 4: PiWatch
-
-- [x] Play with [PiTraffic Lights](https://sb-components.co.uk/pi-traffic.html) mounted on top of `ceil-router`
-- [x] Deploy kubewatch to push K8S events to arbitrary webhook
-- [x] Build dockerized Python/FastAPI (ASGI) based webapp [PiWatch](https://github.com/helmuthva/piwatch) triggering PiTraffic as audiovisual event handler for K8S by providing webhook for kubewatch
-- [ ] Refine `PiWatch` to react more fine granular to specific K8S events
-
-### Phase 5: PiPHP
-
-- [x] Deploy custom built base image [arm32v7-docker-php-apache](https://github.com/helmuthva/arm32v7-docker-php-apache) to k8s from private registry provided by router. Further progress of the base image tracked in respective repository.
-- [x] Prepare [Helmuts Helm Chart Repository](https://helmuthva.github.com/helm) hosted on ghpages.
-- [x] Prepare [PiPHP](https://helmuthva.github.com/piphp) docker image based on said base image inc. helm chart and redeploy. Further progress of said app tracked in said repository.
-- [x] Automate build->deploy workflow inc. helming locally.
-- [ ] Automate full CI/CD workflow with GitHub Actions or similar.
 
 ### Phase 6: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics
@@ -106,17 +86,13 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 * CloudOps
   * Workstation: MacBook Pro
   * Package manager: Homebrew
-  * Flash-Tool for OS of RPis: Hypriot Flash
   * Entrypoints: `make` and `kubectl` (GitOps in second step)
 * Hardware
-  * SBCs: 5x Raspberry Pi 3B+
-  * Storage: 5x 128GiB SD cards (containers), 5x 128GiB USB ThumbDrives (volumes)
-  * Rack: transparent
+  * SBCs: 3x Gigabyte bace 3160 with 8GB SO-DIMM
+  * Storage: 3x 128GiB SSDs (containers), 3x 128GiB USB ThumbDrives (volumes)
   * Networking: 5-port GBit/s switch + WiFi router connected to router
-  * Power: 6-port USB charger powering switch and RPIs
-  * 4-dir traffic lights with beeper and button: [PiTraffic](https://sb-components.co.uk/pi-traffic.html)
 * Software
-  * OS: Debian, Hypriot distribution
+  * OS: Debian Stretch
   * Networking for router: iptables, dhcpcd, dnsmasq, OpenVPN, ddclient, CloudFlare
   * Configuration management: Ansible
   * Orchestration: Kubernetes (K8S)
@@ -127,40 +103,34 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
   * Loadbalancer: MetaLB
   * Deployments: helm
   * Monitoring and Dashboarding: prometheus, grafana
-  * Traffic lights: kubewatch, Python, Flask, PiTraffic, RPi.GPIO
 
 ## Install this repository
 
 1) Fork this repository and clone to your workstation
 2) Walk all files with suffix `.tpl`, create a copy in the same directory without said suffix and enter specifics where invited by capital letters
 
-## Provision RPIs
+## Provision Mini PCs
 
-1) Prepare you workstation by installing Ansible, kubectl, helm etc. using homebrew: `make prepare-mac`
-2) Pull the hypriot image (which is not stored  in GitHub): `make pull-image`
-3) Flash RPIs (insert SD cards in your workstation): `make {router,one,two,three,four}-provision`
-4) Insert SD cards into slots of respective RPIs
-5) Insert thumb drives into USB ports of RPIs
-6) Start RPIs by plugging in the USB charger
+1) Manual provisioning by installing Debian Stretch from ISO on USB thumbs
 
 ## Setup router
 
-1) Make a DHCP reservation for `ceil-router` on your home or company WiFi router with IP address `192.168.0.100` -  it will register as `ceil-router` at your WiFi router
-2) Set up a static route to the k8s subnet `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
-3) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
+1) Make a DHCP reservation for `max-router` on your home or company WiFi router with IP address `192.168.0.111` -  it will register as `max-one` at your WiFi router
+2) Set up a static route to the k8s subnet `12.0.0.0` with `192.168.0.111` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
+3) Reboot `max-one` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `max-one.local`
 4) Check via `make router-check-ip` if the IP address has been picked up
 5) Setup networking services on router using `make router-setup`
-6) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
-7) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
+6) Add `192.168.0.111` as the second nameserver for the (WiFi) connection of your workstation using system settings
+7) Wait for 1 minute than check if the k8s nodes (`max-{one,two,three}.dev`) have picked up their designated IP addresses from the router in the range `12.0.0.101` to `12.0.0.103`:  `make k8s-check-ip` 
 
 Notes:
 - Danger: wipes thumb drive in router
-- It might take some time until the Zeroconf/Avahi distributed the name `ceil-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
-- The router will manage / route to the subnet `11.0.0.[0-128]` (`11/25`) the K8S nodes will life in and act as their DHCP and DNS server
-- Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.ceil.pro` via DDNS
+- It might take some time until the Zeroconf/Avahi distributed the name `max-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
+- The router will manage / route to the subnet `12.0.0.[0-128]` (`12/25`) the K8S nodes will life in and act as their DHCP and DNS server
+- Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.max.pro` via DDNS
 - After setting up the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
-- After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three,four}-ssh`
-- If on your workstation `nslookup ceil-{one,two,three.four}.dev` works but `ping ceil-{one,two,three.four}.dev` does not, reestablish the (WiFi) connection of your workstation
+- After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three}-ssh`
+- If on your workstation `nslookup max-{one,two,three}.dev` works but `ping max-{one,two,three}.dev` does not, reestablish the (WiFi) connection of your workstation
 - If you want to play with the traffic lights mounted on top of the router: `make router-traffic`
 - The last step of the router setup is building [PiWatch](https://github.com/helmuthva/piwatch) which takes ca. 15 minutes for the 1st build
 - Last but not least the router provides a docker registry mirror and private docker registry consumed by the K8S nodes
@@ -170,9 +140,9 @@ Notes:
 1) Execute `make setup` to setup K8S inc. persistence and deploy everything at once - takes ca. 45 minutes. 
 
 Notes:
-- `ceil-one` is set up as k8s master
+- `max-one` is set up as k8s master
 - Danger: wipes thumb drives for setting up GlusterFS.
-- Because of memory constraints the GlusterFS spans `ceil-two` to `ceil-four` but not `ceil-one`
+- Because of memory constraints the GlusterFS spans `max-two` to `max-three` but not `max-one`
 
 Alternatively you can execute the setup and deploy steps one-by-one as described below
 
@@ -196,9 +166,9 @@ Notes:
 1) Setup K8S cluster inc. persistence via GlusterFS+Heketi and helm/tiller for later deployments: `make k8s-setup`. 
 
 Notes:
-- `ceil-one` is set up as k8s master
+- `max-one` is set up as k8s master
 - Danger: wipes thumb drives for setting up GlusterFS.
-- Because of memory constraints the GlusterFS spans `ceil-two` to `ceil-four` but not `ceil-one`
+- Because of memory constraints the GlusterFS spans `max-two` to `max-three` but not `max-one`
 
 ## Deploy
 

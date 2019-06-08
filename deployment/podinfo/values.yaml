@@ -12,7 +12,7 @@ faults:
 
 image:
   repository: stefanprodan/podinfo
-  tag: podinfo-arm
+  tag: latest
   pullPolicy: IfNotPresent
 
 service:

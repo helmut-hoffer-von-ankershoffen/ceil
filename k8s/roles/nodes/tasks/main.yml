@@ -11,42 +11,15 @@
   when: not inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')
   register: hostname
 
-- name: "Detach cloud-init from managing /etc/hosts (does not work)"
-  lineinfile:
-    dest: /var/lib/cloud/instance/user-data.txt
-    regexp: 'manage_etc_hosts:.+$'
-    line: "manage_etc_hosts: false"
-    state: present
-  become: true
-  register: hostname
-
 - name: "Ensure all hostnames in /etc/hosts"
   lineinfile:
     dest: /etc/hosts
-    regexp: '{{ hostvars[item].ansible_default_ipv4.address }}.+$'
-    line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}"
+    regexp: '{{ hostvars[item].ansible_host }}.+$'
+    line: "{{ hostvars[item].ansible_host }} {{ hostvars[item].inventory_hostname }} {{ hostvars[item].inventory_hostname_short }}"
     state: present
   with_items: "{{ groups.all }}"
   become: true
   register: hostname
-
-- name: "Enabling cgroup options at boot and setup necessary cgroups"
-  copy:
-    src: cmdline.txt
-    dest: /boot/cmdline.txt
-    owner: root
-    group: root
-    mode: 0755
-  register: cmdline
-
-- name: "Select cgroup driver"
-  lineinfile:
-    dest: /lib/systemd/system/docker.service
-    regexp: 'ExecStart.+$'
-    line: "ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock --exec-opt native.cgroupdriver=cgroupfs"
-    state: present
-  become: true
-  register: docker
 
 - name: "Disable swap in fstab"
   replace:
@@ -62,15 +35,52 @@
     autoremove: yes
     cache_valid_time: 86400
 
+- name: "Install apt tools"
+  apt:
+    state: latest
+    pkg:
+      - aptitude
+      - apt-transport-https
+
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
 - name: "apt-get upgrade"
   apt:
     upgrade: full
   register: upgrade
 
+- name: "Add apt signing key from official docker repo"
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: "Add docker official repository for Debian Stretch"
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+    state: present
+
+- name: "Index new repo into the cache"
+  become: yes
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+
 - name: "Install prerequisites"
   apt:
     state: latest
     pkg:
+    - net-tools
+    - sudo
+    - sendmail-bin
+    - python-setuptools
+    - python-pip
     - ntp
     - telnet
     - ca-certificates
@@ -80,13 +90,18 @@
     - ipvsadm
     - docker-ce
     - dnsutils
+    - docker-ce
+
+- name: "Install libraries"
+  pip:
+    name: docker
 
 - name: "Reboot"
   shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
   async: 1
   poll: 0
   ignore_errors: true
-  when: hostname.changed or cmdline.changed or docker.changed or upgrade.changed or swap.changed
+  when: hostname.changed or upgrade.changed or swap.changed
   register: rebooted
 
 - name: "Wait for up"
@@ -95,12 +110,6 @@
     connect_timeout: 5
     sleep: 1
     timeout: 240
-  when: rebooted.changed
-
-- name: "Sleep"
-  delegate_to: localhost
-  shell: sleep 120
-  sudo: false
   when: rebooted.changed
 
 - name: "Pass bridged IPv4 traffic to iptables' chains"
@@ -139,6 +148,15 @@
     src: daemon.json
     dest: /etc/docker/daemon.json
 
+- name: "Select cgroup driver"
+  lineinfile:
+    dest: /lib/systemd/system/docker.service
+    regexp: 'ExecStart.+$'
+    line: "ExecStart=/usr/bin/dockerd -H unix:///var/run/docker.sock --exec-opt native.cgroupdriver=cgroupfs"
+    state: present
+  become: true
+  register: docker
+
 - name: "Restart docker"
   service:
     name: docker
@@ -146,7 +164,7 @@
 
 - name: "Sleep"
   delegate_to: localhost
-  shell: sleep 120
+  shell: sleep 10
   sudo: false
 
 - name: "kubeadmn config images pull"

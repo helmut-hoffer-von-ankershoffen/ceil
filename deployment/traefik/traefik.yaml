@@ -121,7 +121,7 @@ metadata:
   namespace: kube-system
 spec:
   rules:
-  - host: traefik-ui.ceil.local
+  - host: traefik-ui.max.local
     http:
       paths:
       - path: /

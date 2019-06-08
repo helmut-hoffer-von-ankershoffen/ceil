@@ -1,9 +1,9 @@
-.PHONY: prepare-mac pull-image router-provision one-provision two-provision three-provision four-provision k8s-uptime k8s-df k8s-reboot router-ssh one-ssh two-ssh three-ssh four-ssh setup teardown k8s-setup k8s-remove k8s-proxy k8s-dashboard-bearer-token-show k8s-dashboard-open
+.PHONY: prepare-mac pull-image router-provision one-provision two-provision three-provision four-provision k8s-uptime k8s-df k8s-reboot one-ssh two-ssh three-ssh four-ssh setup teardown k8s-setup k8s-remove k8s-proxy k8s-dashboard-bearer-token-show k8s-dashboard-open
 
 help: ## This help dialog.
 	@IFS=$$'\n' ; \
 	help_lines=(`fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##/:/'`); \
-	printf "%-30s %s\n" "DevOps console for Project ceil" ; \
+	printf "%-30s %s\n" "DevOps console for Project max" ; \
 	printf "%-30s %s\n" "===============================" ; \
 	printf "%-30s %s\n" "" ; \
 	printf "%-30s %s\n" "Target" "Help" ; \
@@ -51,16 +51,13 @@ workstation-route-add: ## Add route to k8s subnet via router
 workstation-route-del: ## Delete route to k8s subnet
 	router/scripts/route-to-subnet-delete
 
-router-ssh: ## ssh to router
-	ssh admin@ceil-router.local
-
 router-df: ## Show df of router
 	cd router && ansible -a "df -kh" all
 
 router-uptime: ## Show uptime of router
 	cd router && ansible -a uptime all
 
-router-reboot: ## Reboot ceil-router
+router-reboot: ## Reboot max-router
 	cd router && ansible -a "shutdown -r now" all
 
 router-check-ip: ## Check IP addresss of router
@@ -82,16 +79,13 @@ router-piwatch-docs-open: ## Open OAS3 docs of PiWatch
 	python -mwebbrowser http:/192.168.0.100/docs
 
 one-ssh: ## ssh to one
-	ssh admin@ceil-one.dev
+	ssh root@max-one.dev
 
 two-ssh: ## ssh to two
-	ssh admin@ceil-two.dev
+	ssh root@max-two.dev
 
 three-ssh: ## ssh to three
-	ssh admin@ceil-three.dev
-
-four-ssh: ## ssh to four
-	ssh admin@ceil-four.dev
+	ssh root@max-three.dev
 
 k8s-ping: ## Ping nodes
 	cd k8s && ansible -m ping all
@@ -169,13 +163,13 @@ traefik-delete: ## Delete traefik ingress controller
 	deployment/traefik/delete
 
 traefik-ui-open: ## Open traefik UI
-	python -mwebbrowser http://traefik-ui.ceil.local
+	python -mwebbrowser http://traefik-ui.max.local
 
 httpd-deploy: ## Deploy httpd
 	deployment/httpd/deploy
 
 httpd-open: ## Open httpd
-	python -mwebbrowser http://httpd.ceil.local
+	python -mwebbrowser http://httpd.max.local
 
 httpd-delete: ## Delete httpd
 	deployment/httpd/delete
@@ -184,9 +178,9 @@ prometheus-deploy: ## Deploy prometheus
 	deployment/prometheus/deploy
 
 prometheus-open: ## Open prometheus
-	python -mwebbrowser http://prometheus.ceil.local
-	python -mwebbrowser http://alertmanager.ceil.local
-	python -mwebbrowser http://pushgateway.ceil.local
+	python -mwebbrowser http://prometheus.max.local
+	python -mwebbrowser http://alertmanager.max.local
+	python -mwebbrowser http://pushgateway.max.local
 
 prometheus-delete: ## Delete prometheus
 	deployment/prometheus/delete
@@ -198,7 +192,7 @@ grafana-admin-password-show: ## Show grafana password
 	kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 
 grafana-open: ## Open grafana
-	python -mwebbrowser http://grafana.ceil.local
+	python -mwebbrowser http://grafana.max.local
 
 grafana-delete: ## Delete grafana
 	deployment/grafana/delete
@@ -222,7 +216,7 @@ ngrok-tunnel-port-exposed-show: ## Show port exposed by ngrok-tunnel
 	kubectl get --namespace ngrok -o jsonpath="{.spec.ports[0].nodePort}" services tunnel-ngrok
 
 ngrok-status: ## Show ngrok status
-	python -mwebbrowser http://ceil-one.local:31742/status
+	python -mwebbrowser http://max-one.local:31742/status
 
 ngrok-delete: ## Delete ngrok
 	deployment/ngrok/delete

@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-cd "$(dirname "$0")/../.."
-
-workstation/bin/flash --force --bootconf "host/config/config.txt" --hostname "ceil-one" --userdata host/config/node.yaml host/image/hypriotos-rpi-v1.10.0.img.zip

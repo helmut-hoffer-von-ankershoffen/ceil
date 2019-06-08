@@ -1,6 +1,6 @@
 {
-  "labels": [ "os=linux", "arch=arm64" ],
-  "registry-mirrors": ["http://ceil-router.dev:5000"],
-  "insecure-registries": ["ceil-router.dev:5000","ceil-router.dev:5001"],
+  "labels": [ "os=linux", "arch=amd64" ],
+  "registry-mirrors": ["http://max-one.dev:5000"],
+  "insecure-registries": ["max-one.dev:5000","max-one.dev:5001"],
   "experimental": true
 }

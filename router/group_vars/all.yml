@@ -1,1 +1,5 @@
 ---
+
+thumb:
+  device: /dev/sdb
+  partition: /dev/sdb1

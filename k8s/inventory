@@ -1,8 +1,7 @@
 [all]
-ceil-one.dev         ansible_host=11.0.0.101
-ceil-two.dev         ansible_host=11.0.0.102
-ceil-three.dev       ansible_host=11.0.0.103
-ceil-four.dev        ansible_host=11.0.0.104
+max-one.dev         ansible_host=12.0.0.101
+max-two.dev         ansible_host=12.0.0.102
+max-three.dev       ansible_host=12.0.0.103
 
 [master]
-ceil-one.dev
+max-one.dev         ansible_host=12.0.0.101

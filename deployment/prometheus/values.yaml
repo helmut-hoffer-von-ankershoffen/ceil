@@ -97,7 +97,7 @@ alertmanager:
     ## Must be provided if Ingress is enabled
     ##
     hosts:
-      - alertmanager.ceil.local
+      - alertmanager.max.local
     #   - alertmanager.domain.com
     #   - domain.com/alertmanager
 
@@ -314,7 +314,7 @@ kubeStateMetrics:
   ## kube-state-metrics container image
   ##
   image:
-    repository: k8s.gcr.io/kube-state-metrics-arm
+    repository: k8s.gcr.io/kube-state-metrics
     tag: v1.5.0
     pullPolicy: IfNotPresent
 
@@ -633,7 +633,7 @@ server:
     ## Must be provided if Ingress is enabled
     ##
     hosts:
-      - prometheus.ceil.local
+      - prometheus.max.local
     #   - prometheus.domain.com
     #   - domain.com/prometheus
 
@@ -819,7 +819,7 @@ pushgateway:
     ## Must be provided if Ingress is enabled
     ##
     hosts:
-      - pushgateway.ceil.local
+      - pushgateway.max.local
     #   - pushgateway.domain.com
     #   - domain.com/pushgateway
 

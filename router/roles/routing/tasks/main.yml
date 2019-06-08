@@ -11,6 +11,7 @@
     pkg:
       - isc-dhcp-client
       - isc-dhcp-common
+  register: isc
 
 - name: "Install packages"
   apt:
@@ -21,20 +22,6 @@
       - iptables
       - iptables-persistent
   register: install
-
-- name: "Do not manage eth0 via cloud-init"
-  become: true
-  copy:
-    src: 99-disable-network-config.cfg
-    dest: /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
-  register: cloudinit
-
-- name: "Remove cloud-init interface definition for eth0"
-  become: true
-  file:
-    path: /etc/network/interfaces.d/50-cloud-init.cfg
-    state: absent
-  register: interfaces
 
 - name: "Configure dhcpcd"
   become: true
@@ -57,7 +44,7 @@
     path: /var/lib/misc/dnsmasq.leases
   when: dnsmasq.changed
 
-- name: "Delay start of dnsmasq for dhcpd to have setup eth0"
+- name: "Delay start of dnsmasq for dhcpd to have setup enp3s0"
   become: true
   lineinfile:
     path: /etc/init.d/dnsmasq
@@ -73,7 +60,7 @@
     reload: yes
   register: sysctl
 
-- name: "Route from wlan0 to eth0"
+- name: "Route from wlp2s0 to enp3s0"
   become: true
   copy:
     src: rules.v4
@@ -85,7 +72,7 @@
   async: 1
   poll: 0
   ignore_errors: true
-  when: cloudinit.changed or interfaces.changed or install.changed or dhcpcd.changed or dnsmasq.changed or dnsmasqDelay.changed or sysctl.changed or iptables.changed
+  when: isc.changed or install.changed or dhcpcd.changed or dnsmasq.changed or dnsmasqDelay.changed or sysctl.changed or iptables.changed
   register: rebooted
 
 - name: "Wait for up"

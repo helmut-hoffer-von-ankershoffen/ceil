@@ -3,4 +3,4 @@
 cd "$(dirname "$0")"
 
 kubectl delete -f traefik.yaml || true
-kubectl label node ceil-two.dev ingress-controller- || true
+kubectl label node max-two.dev ingress-controller- || true

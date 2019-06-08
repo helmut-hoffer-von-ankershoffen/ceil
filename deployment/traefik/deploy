@@ -2,5 +2,5 @@
 
 cd "$(dirname "$0")"
 
-kubectl label node ceil-two.dev ingress-controller=traefik --overwrite=true
+kubectl label node max-two.dev ingress-controller=traefik --overwrite=true
 kubectl apply -f traefik.yaml

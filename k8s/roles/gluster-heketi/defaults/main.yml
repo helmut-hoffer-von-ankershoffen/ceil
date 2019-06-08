@@ -20,16 +20,16 @@ k8s_heketi_gluster_tolerations:
 k8s_heketi_gluster_nodeselector:
 
 # The underlying raw storage device
-k8s_heketi_gluster_storage_device: "/dev/sda"
+k8s_heketi_gluster_storage_device: "/dev/sdb"
 
 # Gluster docker image
-k8s_heketi_gluster_image: "apcheamitru/arm32v7-gluster-fedora:4.1.6"
+k8s_heketi_gluster_image: "gluster/gluster-fedora"
 
 # Heketi docker image
-k8s_heketi_heketi_image: "sputnik13/heketi:9.0.0-arm32v7"
+k8s_heketi_heketi_image: "heketi/heketi"
 
 # Heketi distribution
-k8s_heketi_distribution: "https://github.com/heketi/heketi/releases/download/v9.0.0/heketi-client-v9.0.0.linux.arm.tar.gz"
+k8s_heketi_distribution: "https://github.com/heketi/heketi/releases/download/v9.0.0/heketi-client-v9.0.0.linux.amd64.tar.gz"
 
 # kubectl binary
 k8s_heketi_gluster_kubectl: "kubectl"

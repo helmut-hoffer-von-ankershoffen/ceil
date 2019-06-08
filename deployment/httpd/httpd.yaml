@@ -14,7 +14,7 @@ spec:
         k8s-app: httpd
     spec:
       containers:
-      - image: hypriot/rpi-busybox-httpd
+      - image: liuyingshan/busybox-httpd
         name: httpd
         resources:
           limits:
@@ -50,7 +50,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: httpd.ceil.local
+  - host: httpd.max.local
     http:
       paths:
       - path: /

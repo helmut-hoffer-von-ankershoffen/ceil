@@ -92,7 +92,7 @@ ingress:
   labels: {}
   path: /
   hosts:
-  - grafana.ceil.local
+  - grafana.max.local
   tls: []
   #  - secretName: chart-example-tls
   #    hosts:

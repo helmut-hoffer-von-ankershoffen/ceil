@@ -1,5 +1,4 @@
 - hosts: all
-  serial: 1
   roles:
     - nodes
 
@@ -9,14 +8,12 @@
     - dashboard
 
 - hosts: all:!master
-  serial: 1
   roles:
     - workers
 
-- hosts: all
-  serial: 1
-  roles:
-  - gluster-heketi
+#- hosts: all
+#  roles:
+#  - gluster-heketi
 
 - hosts: master
   roles:

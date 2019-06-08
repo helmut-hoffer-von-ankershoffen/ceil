@@ -5,8 +5,6 @@
     - routing
     - vpn
     - ddns
-    - gpio
     - firewall
     - docker-registry-mirror
     - docker-registry-private
-    - PiWatch

@@ -9,35 +9,50 @@
   service:
     name: docker
     state: stopped
+  ignore_errors: yes
 
 - name: "Unmount"
   mount:
     path: /mnt/thumb
-    src: /dev/sda1
+    src: "{{ thumb.partition }}"
     fstype: ext4
     state: unmounted
 
 - name: "Wipe signature and partitions"
   command: >
-    wipefs --all --force /dev/sda
+    wipefs --all --force {{ thumb.device }}
+
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
+- name: "Install prerequisites"
+  apt:
+    state: latest
+    pkg:
+      - parted
 
 - name: "Partition"
   parted:
-    device: /dev/sda
+    device: "{{ thumb.device }}"
     number: 1
     state: present
 
 - name: "Create a ext4 filesystem"
   filesystem:
     fstype: ext4
-    dev: /dev/sda1
+    dev: "{{ thumb.partition }}"
 
 - name: "Mount"
   mount:
     path: /mnt/thumb
-    src: /dev/sda1
+    src: "{{ thumb.partition }}"
     fstype: ext4
     state: mounted
+    opts: nofail
 
 - name: "Start docker"
   service:

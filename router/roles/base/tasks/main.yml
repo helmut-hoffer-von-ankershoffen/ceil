@@ -11,21 +11,6 @@
   when: not inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')
   register: hostname
 
-- name: "Cloud-init must not manage /etc/hosts (does not work)"
-  lineinfile:
-    dest: "{{ item }}"
-    regexp: 'manage_etc_hosts:.+$'
-    line: "manage_etc_hosts: false"
-    state: present
-  become: true
-  register: hostname
-  with_items:
-    - /boot/user-data
-    - /etc/cloud/cloud.cfg
-    - /var/lib/cloud/instances/pirate001/user-data.txt
-    - /var/lib/cloud/instances/pirate001/user-data.txt.i
-    - /var/lib/cloud/instances/pirate001/cloud-config.txt
-
 - name: "Ensure router hostname in /etc/hosts"
   lineinfile:
     dest: /etc/hosts
@@ -50,15 +35,52 @@
     autoremove: yes
     cache_valid_time: 86400
 
+- name: "Install apt tools"
+  apt:
+    state: latest
+    pkg:
+      - aptitude
+      - apt-transport-https
+
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
 - name: "apt-get upgrade"
   apt:
     upgrade: full
   register: upgrade
 
+- name: "Add apt signing key from official docker repo"
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+
+- name: "Add docker official repository for Debian Stretch"
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/debian stretch stable
+    state: present
+
+- name: "Index new repo into the cache"
+  become: yes
+  apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+
 - name: "Install prerequisites"
   apt:
     state: latest
     pkg:
+    - net-tools
+    - sudo
+    - sendmail-bin
+    - python-setuptools
+    - python-pip
     - ntp
     - telnet
     - ca-certificates
@@ -66,6 +88,11 @@
     - gnupg2
     - software-properties-common
     - ipvsadm
+    - docker-ce
+
+- name: "Install libraries"
+  pip:
+    name: docker
 
 - name: "Reboot"
   shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"

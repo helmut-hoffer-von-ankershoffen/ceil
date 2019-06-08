@@ -5,7 +5,7 @@ metadata:
   namespace: default
 spec:
   containers:
-    - image: tpageforfunzies/kubewatcharmhf:v1
+    - image: bitnami/kubewatch
       imagePullPolicy: Always
       name: kubewatch
       volumeMounts:
@@ -22,7 +22,7 @@ spec:
           value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
         - name: WEBHOOK_URL
           value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
-    - image: baykonur/kubectl-proxy-rpi:latest
+    - image: gcr.io/skippbox/kubectl:v1.3.0
       args:
         - proxy
         - "-p"
