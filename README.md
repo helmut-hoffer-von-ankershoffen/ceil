@@ -45,28 +45,38 @@ Enter `make help` to see available commands.
 - [ ] kail and harbor
 - [ ] ngrok
 
+### Phase 4: PiWatch
+
+- [x] Deploy kubewatch to push K8S events to arbitrary webhook
+- [ ] Configure to push to PiTraffic of ceil cluster
+
+### Phase 5: PiPHP
+
+- [ ] Deploy amd64 version of PiPHP
+- [ ] Automate workflow
+
 ### Phase 6: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics
 - [ ] Zero-Scaling using Osiris
 - [ ] Relevant dashboards in grafana
 
-### Phase 7: Mesh-Networking (waiting for ARM images from CNCF et al)
+### Phase 7: Mesh-Networking
 - [ ] Istio for Mesh-Networking
 - [ ] Visibility tools
 - [ ] Additional tools
 
-### Phase 8: GitOps and Progressive Delivery (waiting for ARM images from CNCF et al)
+### Phase 8: GitOps and Progressive Delivery
 
 - [ ] Flagger for Helm using mesh network
 - [ ] Canary deployments using mesh network
 - [ ] ...
 
-### Phase 9: CI and emphemeral test environments (waiting for ARM images from CNCF et al)
+### Phase 9: CI and emphemeral test environments
 - [ ] Setup CI using JenkinsX
 - [ ] ...
 
 
-### Phase 10: A/B testing (waiting for ARM images from CNCF et al)
+### Phase 10: A/B testing
 
 - [ ] Using mesh network
 - [ ] ...
@@ -190,24 +200,13 @@ Notes:
 
 ## Obstacles 
 
-* Examples for setting up K8S on RPis mostly outdated and/or incomplete or making undocumented assumptions or not using Ansible correctly => full rewrite
-* Current Kernel of hypriot does not setup pid cgroup which is used by newer K8S for QoS => downgrade K8S
 * RBAC is rather new and not yet accounted for in deployment procedures of all tools and services => amend
-* Traefik image of hypriot outdated, dashboard not useable => use original image given manifest lists 
-* Some services do not yet compile docker images for ARM and/or do not use docker manifest lists properly => google for alternative images or wait for CNCF
 * Mosts ansible playbooks do not provide a teardown role => build yourself
 
 ## Additional references
 
-* https://medium.com/@evnsio/managing-my-home-with-kubernetes-traefik-and-raspberry-pis-d0330effea9a (ddns, vpn, let's encrypt)
 * https://github.com/luxas/kubeadm-workshop (custom autoscaling, by luxas)
-* http://slides.com/lucask/kubecon-berlin#/18 (multiplatform K8S, by luxas)
 * https://luxaslabs.com/ (slides by luxas)
 * https://medium.com/vescloud/kubernetes-storage-performance-comparison-9e993cb27271 (Kubernetes Storage Performance Benchmark)
-* https://tobru.ch/kubernetes-on-orangepi-arm64/ (unsorted)
 * https://medium.com/@carlosedp/multiple-traefik-ingresses-with-letsencrypt-https-certificates-on-kubernetes-b590550280cf (traefik,let's encrypt)
-* https://medium.com/@carlosedp/building-a-hybrid-x86-64-and-arm-kubernetes-cluster-e7f94ff6e51d (unsorted)
-* https://www.gopeedesignstudio.com/2018/07/13/glusterfs-on-arm/ (glusterfs on arm)
 * https://stefanprodan.com/2018/expose-kubernetes-services-over-http-with-ngrok/ (ngrok, k8s)
-* https://downey.io/blog/how-to-build-raspberry-pi-kubernetes-cluster/ (router)
-* https://downey.io/blog/create-raspberry-pi-3-router-dhcp-server/ (router,dhcp)
