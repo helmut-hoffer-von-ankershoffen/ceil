@@ -28,5 +28,5 @@
 - name: "Download generated {{ client.username }}.ovpn into router/out on the workstation"
   fetch:
     src: "{{ easyrsa.directory }}/keys/{{ client.username }}.ovpn"
-    dest: "out/{{ client.username }}.ovpn"
+    dest: "out/{{ client.username }}@{{ openvpn.host_public }}.ovpn"
     flat: true

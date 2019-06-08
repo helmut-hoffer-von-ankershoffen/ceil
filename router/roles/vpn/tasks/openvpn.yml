@@ -30,17 +30,23 @@
     reload: yes
   register: sysctl
 
-#- name: "Create OpenVPN firewall rule to allow Internet through the VPN connection"
-#  template:
-#    src: "{{ role_path }}/templates/firewall-openvpn-rules.sh.j2"
-#    dest: /etc/firewall-openvpn-rules.sh
-#    mode: 0700
-#    owner: root
-#    group: root
+- name: "Allow in Firewall"
+  ufw:
+    direction: in
+    port: '{{ openvpn.port }}'
+    proto: udp
+    rule: allow
+    state: enabled
 
-#- name: "Enable OpenVPN firewall rule execution in the network interface"
-#  lineinfile:
-#    dest: /etc/network/interfaces
-#    insertafter: '^iface eth0'
-#    line: ' pre-up /etc/firewall-openvpn-rules.sh'
-#  notify: restart networking
+- name: "Delay start of openvpn to allow setup of nic"
+  become: true
+  lineinfile:
+    path: /etc/init.d/openvpn
+    line: sleep 10
+    insertbefore: .+BEGIN INIT
+
+- name: "Restart service"
+  service:
+    name: openvpn
+    state: restarted
+

@@ -22,15 +22,6 @@
 
 - name: "Activate logging"
   ufw:
-    logging: 'on'
-
-- name: "Allow incoming SSH"
-  ufw:
-    direction: in
-    port: ssh
-    proto: tcp
-    rule: allow
-    state: enabled
 
 - name: "Allow SSH"
   ufw:
