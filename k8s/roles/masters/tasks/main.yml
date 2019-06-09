@@ -1,5 +1,37 @@
 ---
 
+- name: "Firewall: allow k8s API on 6443/tcp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '6443'
+    proto: tcp
+    state: enabled
+
+- name: "Firewall: allow weave networking on 6783/udp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '6783'
+    proto: udp
+    state: enabled
+
+- name: "Firewall: allow weave networking on 6784/udp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '6784'
+    proto: udp
+    state: enabled
+
+- name: "Firewall: allow weave networking on 6783/tcp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '6783'
+    proto: tcp
+    state: enabled
+
 - name: "kubeadm init"
   shell: kubeadm init --ignore-preflight-errors=all --apiserver-advertise-address={{ ansible_host }} --token={{ kubernetes_token }} --kubernetes-version={{ kubernetes_version }} --pod-network-cidr={{ kubernetes_podnet }}
   register: kubeadm_init

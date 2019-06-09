@@ -21,13 +21,6 @@
   become: true
   register: hostname
 
-#- name: "Disable swap in fstab"
-#  replace:
-#    path: /etc/fstab
-#    regexp: '^(.+?\sswap\s+sw\s+.*)$'
-#    replace: '# \1'
-#  register: swap
-
 - name: "apt-get update"
   apt:
     update_cache: yes

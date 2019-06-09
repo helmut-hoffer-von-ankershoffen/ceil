@@ -8,6 +8,7 @@ Enter `make help` to see available commands.
 * Educate myself on Ansible + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
 * Enhanced PHP/SF4 stack for K8S supporting HPA, progressive deployments and a/b testing
+* Advanced networking and firewalling to use  `max-one` for router *and* k8s master to optimize budget
 
 ## Tasks
 
@@ -123,7 +124,8 @@ Enter `make help` to see available commands.
 
 ## Provision Mini PCs
 
-1) Manual provisioning by installing Debian Stretch from ISO on USB thumbs
+1) Manual provisioning of base OS on servers by installing Debian Stretch from ISO on USB thumbs
+2) Manual provisioning of wifi connectivity on `max-one` for bootstrapping
 
 ## Setup router
 

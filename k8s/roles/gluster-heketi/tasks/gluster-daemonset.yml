@@ -7,6 +7,50 @@
     that:
       - ansible_play_hosts == ansible_play_hosts_all
 
+- name: "Firewall: allow portmapper on 111/tcp+udp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '111'
+    state: enabled
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Firewall: allow 24007:24020/tcp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '24007:24020'
+    proto: tcp
+    state: enabled
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Firewall: allow 24007:24020/udp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '24007:24020'
+    proto: udp
+    state: enabled
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Firewall: allow 49152:49155/tcp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '49152:49155'
+    proto: tcp
+    state: enabled
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Firewall: allow 49152:49155/udp"
+  ufw:
+    rule: allow
+    direction: in
+    port: '49152:49155'
+    proto: udp
+    state: enabled
+  when: inventory_hostname == groups["master"][0]
+
 # https://github.com/gluster/gluster-kubernetes/blob/27ed3198b57d19ae3230e103a17fc3729e1315ed/deploy/gk-deploy
 
 - name: "Create GlusterFS config directory"
@@ -70,3 +114,8 @@
   retries: 120
   delay: 5
   when: inventory_hostname == groups["master"][0]
+
+- name: "Sleep for GlusterFS peers to find each other"
+  delegate_to: localhost
+  shell: sleep 30
+  sudo: false
