@@ -1,0 +1,26 @@
+---
+
+homebrew_taps:
+  - homebrew/core
+  - homebrew/services
+  - blackfireio/blackfire
+
+homebrew_installed_packages:
+  - curl
+  - wget
+  - awscli
+  - pv
+  - unzip
+  - ansible
+  - kubernetes-cli
+  - kubernetes-helm
+
+homebrew_cask_appdir: /Applications
+
+homebrew_cask_apps: []
+
+composer_packages: []
+gem_packages: []
+npm_packages: []
+pip_packages: []
+pear_packages: []

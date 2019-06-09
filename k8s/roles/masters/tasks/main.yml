@@ -75,6 +75,22 @@
   shell: "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')\""
   become: true
 
+- name: "Copy resolv.k8s.conf for k8s master that is router as well"
+  become: true
+  template:
+    src: resolv.k8s.conf
+    dest: /etc/resolv.k8s.conf
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Let kubelet on master use resolv.k8s.conf to avoid CoreDNS crash on detecting loop with dnsmasq in place"
+  become: true
+  lineinfile:
+    dest: /var/lib/kubelet/config.yaml
+    regexp: 'resolvConf:.+$'
+    line: "resolvConf: /etc/resolv.k8s.conf"
+    state: present
+  when: inventory_hostname == groups["master"][0]
+
 - name: "Poke kubelet"
   systemd:
     name: kubelet

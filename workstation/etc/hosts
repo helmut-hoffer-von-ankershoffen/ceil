@@ -1,6 +1,0 @@
-11.0.0.102 httpd.max.local
-11.0.0.102 traefik-ui.max.local
-11.0.0.102 prometheus.max.local
-11.0.0.102 alertmanager.max.local
-11.0.0.102 pushgateway.max.local
-11.0.0.102 grafana.max.local

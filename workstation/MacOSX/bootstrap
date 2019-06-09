@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+# Cp. https://raw.githubusercontent.com/siyelo/laptop/master/install.sh
+
+fancy_echo() {
+  local fmt="$1"; shift
+
+  # shellcheck disable=SC2059
+  printf "\n$fmt\n" "$@"
+}
+
+fancy_echo "Boostrapping Mac for development ..."
+
+trap 'ret=$?; test $ret -ne 0 && printf "failed\n\n" >&2; exit $ret' EXIT
+
+set -e
+
+# Ensure Apple's command line tools are installed
+if ! command -v cc >/dev/null; then
+  fancy_echo "Installing xcode ..."
+  xcode-select --install
+else
+  fancy_echo "Xcode already installed. Skipping."
+fi
+
+# Ensure Homebrew is installed
+if ! command -v brew >/dev/null; then
+  fancy_echo "Installing Homebrew ..."
+  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" </dev/null
+else
+  fancy_echo "Homebrew already installed. Skipping."
+fi
+
+# Update Homebrew recipes
+fancy_echo "Updating Homebrew recipes ..."
+brew update
+
+# Ensure Ansible is installed
+if ! command -v ansible >/dev/null; then
+  fancy_echo "Installing Ansible ..."
+  brew install ansible
+else
+  fancy_echo "Ansible already installed. Skipping."
+fi
+
+# export GPG_TTY to enable signing of git commits
+export GPG_TTY=$(tty)

@@ -23,9 +23,13 @@ help: ## This help dialog.
 	@:    # thanks to Wi.lliam Pursell
 
 
-prepare-mac: ## Prepare mac for provisioning (install packages via brew)
-	workstation/prepare/mac
-	ansible-galaxy install -r k8s/requirements.yaml
+prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, install packages via homebrew, update /etc/hosts etc.)
+	workstation/MacOSX/bootstrap
+	ansible-galaxy install -r workstation/MacOSX/ansible/requirements.yml
+	ansible-playbook -i "localhost," workstation/MacOSX/ansible/playbook.yml --ask-become-pass
+	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
+	ansible-galaxy install -r router/requirements.yaml || true
+	ansible-galaxy install -r k8s/requirements.yaml || true
 
 pull-image: ## Pull
 	cd host/image && wget https://github.com/hypriot/image-builder-rpi/releases/download/v1.10.0/hypriotos-rpi-v1.10.0.img.zip
@@ -227,7 +231,7 @@ piphp-deploy: ## Deploy piphp
 piphp-delete: ## Delete piphp
 	deployment/piphp/delete
 
-all-deploy: metalb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
+all-deploy: metalb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy ## Execute all deployments
 
 all-delete: ngrok-delete podinfo-delete kubewatch-deploy grafana-delete prometheus-delete httpd-delete traefik-delete metalb-delete ## Delete all deployments
 

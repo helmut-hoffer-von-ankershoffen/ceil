@@ -205,20 +205,6 @@ Notes:
 * RBAC is rather new and not yet accounted for in deployment procedures of all tools and services => amend
 * Mosts ansible playbooks do not provide a teardown role => build yourself
 
-## Other Notes
-
-### /etc/hosts on workstation
-
-12.0.0.102 max-two max-two.dev
-12.0.0.103 max-three max-three.dev
-
-12.0.0.102 httpd.max.local
-12.0.0.102 traefik-ui.max.local
-12.0.0.102 prometheus.max.local
-12.0.0.102 alertmanager.max.local
-12.0.0.102 pushgateway.max.local
-12.0.0.102 grafana.max.local
-
 ## Additional references
 
 * https://github.com/luxas/kubeadm-workshop (custom autoscaling, by luxas)
@@ -226,4 +212,3 @@ Notes:
 * https://medium.com/vescloud/kubernetes-storage-performance-comparison-9e993cb27271 (Kubernetes Storage Performance Benchmark)
 * https://medium.com/@carlosedp/multiple-traefik-ingresses-with-letsencrypt-https-certificates-on-kubernetes-b590550280cf (traefik,let's encrypt)
 * https://stefanprodan.com/2018/expose-kubernetes-services-over-http-with-ngrok/ (ngrok, k8s)
-* https://github.com/coredns/coredns/issues/2087 (coreDNS and dnsmasq)

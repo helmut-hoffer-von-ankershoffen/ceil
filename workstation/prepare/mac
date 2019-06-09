@@ -1,4 +1,0 @@
-#!/usr/bin/env bash
-
-# See https://github.com/hypriot/flash
-brew install curl wget awscli pv unzip ansible kubernetes-cli kubernetes-helm
