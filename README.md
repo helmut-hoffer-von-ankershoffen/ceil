@@ -2,7 +2,7 @@
 
 Enter `make help` to see available commands.
 
-See [Branch masater](https://github.com/helmuthva/ceil) for the RPi variant
+See [Branch master](https://github.com/helmuthva/ceil) for the RPi variant
 
 ## Goals
 
