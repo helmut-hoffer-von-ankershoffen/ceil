@@ -21,7 +21,7 @@ k8s_heketi_gluster_nodeselector:
 k8s_heketi_gluster_storage_device: "/dev/sdb"
 
 # Gluster docker image
-k8s_heketi_gluster_image: "gluster/gluster-fedora"
+k8s_heketi_gluster_image: "gluster/gluster-centos:latest"
 
 # Heketi docker image
 k8s_heketi_heketi_image: "heketi/heketi"
