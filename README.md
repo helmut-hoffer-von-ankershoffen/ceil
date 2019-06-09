@@ -130,7 +130,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 2) Manual provisioning of wifi connectivity on `max-one` for bootstrapping using wpa_supplicant etc.
 
 Notes:
-- Tool for flashing ISO image on USB sticks: https://www.balena.io/etcher/
+- Tool for flashing ISO image on USB thumbs: https://www.balena.io/etcher/
 - Debian ISO image with (non-free) drivers for Intel based WiFi Chip: http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/9.9.0+nonfree/amd64/iso-cd/
 
 ## Setup router
