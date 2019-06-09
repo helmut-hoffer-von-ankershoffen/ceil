@@ -1,4 +1,4 @@
-# `max`: Auto-provisioned Mini PC cluster running K8S on bare-metal
+# `max`: Auto-provisioned Mini PC (amd64) cluster running K8S on bare-metal
 
 Enter `make help` to see available commands.
 
