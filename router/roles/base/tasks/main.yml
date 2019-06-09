@@ -11,22 +11,22 @@
   when: not inventory_hostname is match('(\d{1,3}\.){3}\d{1,3}')
   register: hostname
 
-- name: "Ensure router hostname in /etc/hosts"
-  lineinfile:
-    dest: /etc/hosts
-    regexp: '{{ hostvars[item].ansible_default_ipv4.address }}.+$'
-    line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}"
-    state: present
-  with_items: "{{ groups.all }}"
-  become: true
-  register: hostname
+#- name: "Ensure router hostname in /etc/hosts"
+#  lineinfile:
+#    dest: /etc/hosts
+#    regexp: '{{ hostvars[item].ansible_default_ipv4.address }}.+$'
+#    line: "{{ hostvars[item].ansible_default_ipv4.address }} {{ hostvars[item].ansible_fqdn }} {{ hostvars[item].ansible_hostname }}"
+#    state: present
+#  with_items: "{{ groups.all }}"
+#  become: true
+#  register: hostname
 
-- name: "Disable swap in fstab"
-  replace:
-    path: /etc/fstab
-    regexp: '^(.+?\sswap\s+sw\s+.*)$'
-    replace: '# \1'
-  register: swap
+#- name: "Disable swap in fstab"
+#  replace:
+#    path: /etc/fstab
+#    regexp: '^(.+?\sswap\s+sw\s+.*)$'
+#    replace: '# \1'
+#  register: swap
 
 - name: "apt-get update"
   apt:
@@ -99,7 +99,7 @@
   async: 1
   poll: 0
   ignore_errors: true
-  when: hostname.changed or swap.changed or upgrade.changed
+  when: hostname.changed or upgrade.changed
   register: rebooted
 
 - name: "Wait for up"

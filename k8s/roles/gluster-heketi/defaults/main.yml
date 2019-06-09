@@ -4,17 +4,15 @@ k8s_heketi_gluster_default_storageclass: true
 # If True nodes will be labeled and tainted NoSchedule
 k8s_heketi_gluster_force_dedicated: false
 
-# Kubernetes tolerations
+# Kubernetes tolerations to allow GlusterFS + Heketi on master
 k8s_heketi_gluster_tolerations:
-
-# GlusterFS on master nodes disabled due to memory constraints
-#  - key: node-role.kubernetes.io/master
-#    operator: Equal
-#    value: "true"
-#    effect: NoSchedule
-#  - key: node-role.kubernetes.io/master
-#    operator: Equal
-#    effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    value: "true"
+    effect: NoSchedule
+  - key: node-role.kubernetes.io/master
+    operator: Equal
+    effect: NoSchedule
 
 # Kubernetes node-selector
 k8s_heketi_gluster_nodeselector:

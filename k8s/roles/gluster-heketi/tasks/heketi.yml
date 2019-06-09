@@ -1,12 +1,7 @@
 # https://github.com/heketi/heketi/blob/v6.0.0/docs/admin/install-kubernetes.md
 ---
 
-- name: "Check all hosts accessible"
-  assert:
-    that:
-    - ansible_play_hosts == ansible_play_hosts_all
-
-- name: "Create Hekety yaml directory"
+- name: "Create Heketi yaml directory"
   file:
     path: ~/kubernetes-yaml/heketi/
     state: directory

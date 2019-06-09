@@ -1,10 +1,5 @@
 ---
 
-- name: "Check all hosts accessible"
-  assert:
-    that:
-      - ansible_play_hosts == ansible_play_hosts_all
-
 - name: "Load required kernel modules"
   become: true
   modprobe:

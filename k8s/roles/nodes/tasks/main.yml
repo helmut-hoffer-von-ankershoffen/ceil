@@ -21,12 +21,12 @@
   become: true
   register: hostname
 
-- name: "Disable swap in fstab"
-  replace:
-    path: /etc/fstab
-    regexp: '^(.+?\sswap\s+sw\s+.*)$'
-    replace: '# \1'
-  register: swap
+#- name: "Disable swap in fstab"
+#  replace:
+#    path: /etc/fstab
+#    regexp: '^(.+?\sswap\s+sw\s+.*)$'
+#    replace: '# \1'
+#  register: swap
 
 - name: "apt-get update"
   apt:
@@ -101,7 +101,7 @@
   async: 1
   poll: 0
   ignore_errors: true
-  when: hostname.changed or upgrade.changed or swap.changed
+  when: hostname.changed or upgrade.changed
   register: rebooted
 
 - name: "Wait for up"

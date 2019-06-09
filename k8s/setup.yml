@@ -11,9 +11,9 @@
   roles:
     - workers
 
-#- hosts: all
-#  roles:
-#  - gluster-heketi
+- hosts: all
+  roles:
+  - gluster-heketi
 
 - hosts: master
   roles:

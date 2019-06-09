@@ -1,7 +1,7 @@
 ---
 
 - name: "kubeadm init"
-  shell: kubeadm init --ignore-preflight-errors=all --apiserver-advertise-address={{ ansible_default_ipv4.address }} --token={{ kubernetes_token }} --kubernetes-version={{ kubernetes_version }} --pod-network-cidr={{ kubernetes_podnet }}
+  shell: kubeadm init --ignore-preflight-errors=all --apiserver-advertise-address={{ ansible_host }} --token={{ kubernetes_token }} --kubernetes-version={{ kubernetes_version }} --pod-network-cidr={{ kubernetes_podnet }}
   register: kubeadm_init
   when: kubeadm_reset is succeeded
   become: true
@@ -34,7 +34,7 @@
     flat: yes
 
 - name: "Join cluster"
-  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ groups['master'][0] }}:6443 --discovery-token-unsafe-skip-ca-verification
+  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ hostvars[groups['master'][0]].ansible_host }}:6443 --discovery-token-unsafe-skip-ca-verification
   when: kubeadm_reset is succeeded
   become: true
   register: kubeadm_join

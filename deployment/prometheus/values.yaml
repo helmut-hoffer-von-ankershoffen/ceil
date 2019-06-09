@@ -35,7 +35,7 @@ alertmanager:
   ## alertmanager container image
   ##
   image:
-    repository: carlosedp/alertmanager
+    repository: prom/alertmanager
     pullPolicy: IfNotPresent
 
   ## alertmanager priorityClassName
@@ -254,7 +254,7 @@ configmapReload:
   ## configmap-reload container image
   ##
   image:
-    repository: carlosedp/configmap-reload
+    repository: jimmidyson/configmap-reload
     pullPolicy: IfNotPresent
 
   ## Additional configmap-reload container arguments
@@ -403,7 +403,7 @@ nodeExporter:
   ## node-exporter container image
   ##
   image:
-    repository: carlosedp/node_exporter
+    repository: prom/node-exporter
     pullPolicy: IfNotPresent
 
   ## Specify if a Pod Security Policy for node-exporter must be created
@@ -516,7 +516,7 @@ server:
   ## Prometheus server container image
   ##
   image:
-    repository: carlosedp/prometheus
+    repository: prom/prometheus
     pullPolicy: IfNotPresent
 
   ## prometheus server priorityClassName
@@ -791,7 +791,7 @@ pushgateway:
   ## pushgateway container image
   ##
   image:
-    repository: carlosedp/pushgateway
+    repository: prom/pushgateway
     pullPolicy: IfNotPresent
 
   ## pushgateway priorityClassName

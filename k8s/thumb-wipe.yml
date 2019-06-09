@@ -13,4 +13,4 @@
         - parted
   - name: "Wipe signature and partitions of thumb drives"
     command: >
-      wipefs --all --force {{ thumb.device }}
+      wipefs --all --force /dev/sdb

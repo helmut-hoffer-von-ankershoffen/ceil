@@ -117,7 +117,7 @@ k8s-dashboard-open: ## Open Dashboarrd
 k8s-remove: ## Remove previous installation of Kubernetes cluster
 	cd k8s && ansible-playbook remove.yml
 
-thumb-wipe: ## Wipe all thump drives (YOU WILL LOSE ALL DATA ON ALL THUMB DRIVES)
+thumb-wipe: ## Wipe thump drives of nodes (not master)
 	cd k8s && ansible-playbook thumb-wipe.yml
 
 gluster-heketi-setup: ## Setup GlusterFS + Heketi for dynamic volume provisioning as default storage class backed by thumb drives

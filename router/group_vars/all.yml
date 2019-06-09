@@ -1,5 +1,5 @@
 ---
 
 thumb:
-  device: /dev/sdb
-  partition: /dev/sdb1
+  device: /dev/sdc
+  partition: /dev/sdc1

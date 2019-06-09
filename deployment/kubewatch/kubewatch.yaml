@@ -22,13 +22,6 @@ spec:
           value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
         - name: WEBHOOK_URL
           value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
-    - image: gcr.io/skippbox/kubectl:v1.3.0
-      args:
-        - proxy
-        - "-p"
-        - "8080"
-      name: proxy
-      imagePullPolicy: Always
   restartPolicy: Always
   serviceAccountName: kubewatch
   volumes:

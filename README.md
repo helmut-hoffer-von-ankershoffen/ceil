@@ -99,7 +99,7 @@ Enter `make help` to see available commands.
   * Entrypoints: `make` and `kubectl` (GitOps in second step)
 * Hardware
   * SBCs: 3x Gigabyte bace 3160 with 8GB SO-DIMM
-  * Storage: 3x 128GiB SSDs (containers), 3x 128GiB USB ThumbDrives (volumes)
+  * Storage: 3x 128GiB SSDs (OS + containers) + 1x 128GiB USB ThumbDrive (Volumes for Docker registries on router) + 3x 128GiB USB ThumbDrives (GlusterFS) 
   * Networking: 5-port GBit/s switch + WiFi router connected to router
 * Software
   * OS: Debian Stretch
@@ -152,7 +152,6 @@ Notes:
 Notes:
 - `max-one` is set up as k8s master
 - Danger: wipes thumb drives for setting up GlusterFS.
-- Because of memory constraints the GlusterFS spans `max-two` to `max-three` but not `max-one`
 
 Alternatively you can execute the setup and deploy steps one-by-one as described below
 
@@ -173,12 +172,11 @@ Notes:
 
 ## Setup K8S inc. persistence and helm/tiller
 
-1) Setup K8S cluster inc. persistence via GlusterFS+Heketi and helm/tiller for later deployments: `make k8s-setup`. 
+1) Wipe thumb drives for GlusterFS using `make thumb-wipe`
+2) Setup K8S cluster inc. persistence via GlusterFS+Heketi and helm/tiller for later deployments: `make k8s-setup`. 
 
 Notes:
 - `max-one` is set up as k8s master
-- Danger: wipes thumb drives for setting up GlusterFS.
-- Because of memory constraints the GlusterFS spans `max-two` to `max-three` but not `max-one`
 
 ## Deploy
 
