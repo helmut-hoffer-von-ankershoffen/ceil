@@ -1,6 +1,8 @@
-# `max`: Auto-provisioned RPi cluster running amd64 on bare-metal
+# `max`: Auto-provisioned amd64 cluster running K8S on bare-metal
 
 Enter `make help` to see available commands.
+
+See [Branch masater](https://github.com/helmuthva/ceil) for the RPi variant
 
 ## Goals
 
