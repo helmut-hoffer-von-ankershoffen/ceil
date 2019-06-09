@@ -15,7 +15,7 @@ Enter `make help` to see available commands.
 
 - [x] Wire up three gigabyte bace 3160 and accessories
 
-![alt text](https://raw.githubusercontent.com/helmuthva/ceil/master/doc/assets/max.jpg "Max Stack")
+![alt text](https://raw.githubusercontent.com/helmuthva/ceil/max/doc/assets/max.jpg "Max Stack")
 
 ### Phase 1: Foundation
 
