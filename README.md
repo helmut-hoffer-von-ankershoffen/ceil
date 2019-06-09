@@ -1,8 +1,8 @@
-# `max`: Auto-provisioned amd64 cluster running K8S on bare-metal
+# `max`: Auto-provisioned Mini PC cluster running K8S on bare-metal
 
 Enter `make help` to see available commands.
 
-See [Branch master](https://github.com/helmuthva/ceil) for the RPi variant
+See [Branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 
 ## Goals
 
@@ -10,7 +10,7 @@ See [Branch master](https://github.com/helmuthva/ceil) for the RPi variant
 * Educate myself on Ansible + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
 * Enhanced PHP/SF4 stack for K8S supporting HPA, progressive deployments and a/b testing
-* Advanced networking and firewalling to use  `max-one` for router *and* k8s master to optimize budget
+* Advanced networking and firewalling to use  one node as router *and* k8s master
 
 ## Tasks
 
