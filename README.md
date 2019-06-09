@@ -10,7 +10,7 @@ See [Branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 * Educate myself on Ansible + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
 * Enhanced PHP/SF4 stack for K8S supporting HPA, progressive deployments and a/b testing
-* Advanced networking and firewalling to use  one node as router *and* k8s master
+* Advanced networking and firewalling to use one node as router *and* k8s master
 
 ## Tasks
 
