@@ -149,11 +149,12 @@ See [branch max](https://github.com/helmuthva/ceil/tree/max) for the Mini PC (am
 
 1) Make a DHCP reservation for `ceil-router` on your home or company WiFi router with IP address `192.168.0.100` -  it will register as `ceil-router` at your WiFi router
 2) Set up a static route to the k8s subnet `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
-3) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
-4) Check via `make router-check-ip` if the IP address has been picked up
-5) Setup networking services on router using `make router-setup`
-6) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
-7) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
+3) For VPN setup port forwarding (sometimes called "virtual server") in your company or home wifi from for port `1194` (or whatever you configured in `router/roles/vpn/defaults/main.yml`) to `192.168.0.100` in your company or home wifi router
+4) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
+5) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
+6) Check via `make router-check-ip` if the IP address has been picked up
+7) Setup networking services on router using `make router-setup`
+8) Wait for 1 minute than check if the k8s nodes (`ceil-{one,two,three,four}.dev`) have picked up their designated IP addresses from the router in the range `11.0.0.101` to `11.0.0.104`:  `make k8s-check-ip` 
 
 Notes:
 - Danger: wipes thumb drive in router
