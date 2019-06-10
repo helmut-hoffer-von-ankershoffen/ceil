@@ -210,8 +210,9 @@ Notes:
 
 ## Obstacles 
 
+* Examples for setting up K8S on bare metal mostly outdated and/or incomplete or making undocumented assumptions or not using Ansible correctly => full rewrite
 * RBAC is rather new and not yet accounted for in deployment procedures of all tools and services => amend
-* Mosts ansible playbooks do not provide a teardown role => build yourself
+* Most ansible playbooks do not provide a teardown role => build yourself
 
 ## Additional references
 
