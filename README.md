@@ -104,7 +104,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
   * Package manager: Homebrew
   * Entrypoints: `make` and `kubectl` (GitOps in second step)
 * Hardware
-  * SBCs: 3x Gigabyte bace 3160 with 8GB SO-DIMM
+  * Mini PCs: 3x Gigabyte bace 3160 with 8GB SO-DIMM
   * Storage: 3x 128GiB SSDs (OS + containers) + 1x 128GiB USB ThumbDrive (Volumes for Docker registries on router) + 3x 128GiB USB ThumbDrives (GlusterFS) 
   * Networking: 5-port GBit/s switch + WiFi router connected to router
 * Software
@@ -136,13 +136,14 @@ Notes:
 
 ## Setup router
 
-1) Make a DHCP reservation for `max-router` on your home or company WiFi router with IP address `192.168.0.111` -  it will register as `max-one` at your WiFi router
+1) Make a DHCP reservation for `max-router` in your home or company WiFi router with IP address `192.168.0.111` -  it will register as `max-one` at your WiFi router
 2) Set up a static route to the k8s subnet `12.0.0.0` with `192.168.0.111` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
-3) Reboot `max-one` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `max-one.local`
-4) Check via `make router-check-ip` if the IP address has been picked up
-5) Setup networking services on router using `make router-setup`
-6) Add `192.168.0.111` as the second nameserver for the (WiFi) connection of your workstation using system settings
-7) Wait for 1 minute than check if the k8s nodes (`max-{one,two,three}.dev`) have picked up their designated IP addresses from the router in the range `12.0.0.101` to `12.0.0.103`:  `make k8s-check-ip` 
+3) For VPN setup port forwarding (sometimes called "virtual server") in your company or home wifi router for port `1194` (or whatever you configured in  `router/roles/vpn/defaults/main.yml`) to `192.168.0.111`
+4) Add `192.168.0.111` as the second nameserver for the (WiFi) connection of your workstation using system settings
+5) Reboot `max-one` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `max-one.local`
+6) Check via `make router-check-ip` if the IP address has been picked up
+7) Setup networking services on router using `make router-setup`
+9) Wait for 1 minute than check if the k8s nodes (`max-{one,two,three}.dev`) have picked up their designated IP addresses from the router in the range `12.0.0.101` to `12.0.0.103`:  `make k8s-check-ip` 
 
 Notes:
 - Danger: wipes thumb drive in router

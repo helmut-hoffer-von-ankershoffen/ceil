@@ -20,7 +20,7 @@
 
 - name: "Sleep"
   delegate_to: localhost
-  shell: sleep 10
+  shell: sleep 30
   sudo: false
 
 - name: "Wait for up"
@@ -110,6 +110,11 @@
   async: 1
   poll: 0
   ignore_errors: true
+
+- name: "Sleep"
+  delegate_to: localhost
+  shell: sleep 30
+  sudo: false
 
 - name: "Wait for up"
   wait_for_connection:
