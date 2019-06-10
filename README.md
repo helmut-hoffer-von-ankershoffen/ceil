@@ -90,8 +90,9 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 
 - [x] Open source under GPlv3
 - [x] Links to useful material for further studies
-- [ ] GitHub Page
+- [ ] Refactor, esp. move roles into separate repos for reuse, use ansible vault etc.
 - [ ] Prepare interactive install script automating the step to manually copy and edit `.tpl` files
+- [ ] GitHub Page
 - [ ] Write a series of blog posts
 - [ ] Prepare a workshop presentation
 - [ ] Educate peers in meetups
