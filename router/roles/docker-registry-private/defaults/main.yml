@@ -22,7 +22,7 @@ docker_registry_volumes: "{{ docker_registry_directory_volumes + docker_registry
 
 docker_registry_memory: 256MB
 
-docker_registry_log_driver: syslog
+docker_registry_log_driver: none
 docker_registry_log_options:
   syslog-facility: local0
   tag: "{{ docker_registry_name }}"

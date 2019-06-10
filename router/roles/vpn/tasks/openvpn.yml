@@ -38,13 +38,12 @@
     rule: allow
     state: enabled
 
-# FIXME: booting to early
-- name: "Delay start of openvpn to allow setup of nic"
+- name: "Do not autostart, will be started when device is ready"
   become: true
   lineinfile:
-    path: /etc/init.d/openvpn
-    line: sleep 10
-    insertbefore: .+BEGIN INIT
+    path: /etc/default/openvpn
+    line: AUTOSTART="none"
+    insertbefore: #AUTOSTART
 
 - name: "Restart service"
   service:
