@@ -1,4 +1,4 @@
-.PHONY: prepare-mac pull-image router-provision one-provision two-provision three-provision four-provision k8s-uptime k8s-df k8s-reboot one-ssh two-ssh three-ssh four-ssh setup teardown k8s-setup k8s-remove k8s-proxy k8s-dashboard-bearer-token-show k8s-dashboard-open
+.PHONY: prepare-mac k8s-uptime k8s-df k8s-reboot one-ssh two-ssh three-ssh setup teardown k8s-setup k8s-remove k8s-proxy k8s-dashboard-bearer-token-show k8s-dashboard-open
 
 help: ## This help dialog.
 	@IFS=$$'\n' ; \
@@ -30,9 +30,6 @@ prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, inst
 	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 	ansible-galaxy install -r router/requirements.yaml || true
 	ansible-galaxy install -r k8s/requirements.yaml || true
-
-pull-image: ## Pull
-	cd host/image && wget https://github.com/hypriot/image-builder-rpi/releases/download/v1.10.0/hypriotos-rpi-v1.10.0.img.zip
 
 router-provision: ## Provision router for boot (flash SD card with OS)
 	host/provision/router
@@ -69,18 +66,6 @@ router-check-ip: ## Check IP addresss of router
 
 router-setup: ## Setup router, .ovpn file will be downloaded into router/out
 	cd router && ansible-playbook setup.yml
-
-router-traffic: ## Simulate traffic
-	cd router && ansible-playbook traffic.yml
-
-router-piwatch-update: ## Build, push and run PiWatch
-	cd router && ansible-playbook piwatch.yml
-
-router-piwatch-webhook-trigger: ## Trigger PiWatch webhook
-	python -mwebbrowser http://192.168.0.100/traffic/kubewatch-webhook
-
-router-piwatch-docs-open: ## Open OAS3 docs of PiWatch
-	python -mwebbrowser http:/192.168.0.100/docs
 
 one-ssh: ## ssh to one
 	ssh root@max-one.dev

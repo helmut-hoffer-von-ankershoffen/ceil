@@ -6,7 +6,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 
 ## Goals
 
-* Setup auto-provisioned amd64 cluster running K8S on bare-metal inc. router
+* Setup auto-provisioned Mini PC (amd64) cluster running K8S on bare-metal inc. router
 * Educate myself on Ansible + K8S + GitOps for CI/CD/PD from bottom to top
 * Refresh knowledge regarding networking and Python
 * Enhanced PHP/SF4 stack for K8S supporting HPA, progressive deployments and a/b testing
@@ -131,7 +131,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 
 Notes:
 - Tool for flashing ISO image on USB thumbs: https://www.balena.io/etcher/
-- Debian ISO image with (non-free) drivers for Intel based WiFi Chip: http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/9.9.0+nonfree/amd64/iso-cd/
+- Debian ISO image with (non-free) drivers for Intel based wifi chip: http://cdimage.debian.org/cdimage/unofficial/non-free/cd-including-firmware/9.9.0+nonfree/amd64/iso-cd/
 
 ## Setup router
 
