@@ -235,7 +235,7 @@ piphp-delete: ## Delete piphp
 
 all-deploy: metalb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
 
-all-delete: ngrok-delete podinfo-delete kubewatch-deploy grafana-delete prometheus-delete httpd-delete traefik-delete metalb-delete ## Delete all deployments
+all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metalb-delete ## Delete all deployments
 
 setup: thumb-wipe k8s-setup all-deploy  ## Setup K8S, deploy all
 
