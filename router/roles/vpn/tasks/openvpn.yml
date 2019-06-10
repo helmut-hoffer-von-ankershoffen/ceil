@@ -38,6 +38,7 @@
     rule: allow
     state: enabled
 
+# FIXME: booting to early
 - name: "Delay start of openvpn to allow setup of nic"
   become: true
   lineinfile:
