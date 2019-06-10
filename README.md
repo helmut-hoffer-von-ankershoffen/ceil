@@ -149,7 +149,7 @@ See [branch max](https://github.com/helmuthva/ceil/tree/max) for the Mini PC (am
 
 1) Make a DHCP reservation for `ceil-router` on your home or company WiFi router with IP address `192.168.0.100` -  it will register as `ceil-router` at your WiFi router
 2) Set up a static route to the k8s subnet `11.0.0.0` with `192.168.0.100` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
-3) For VPN setup port forwarding (sometimes called "virtual server") in your company or home wifi router for port `1194` (or whatever you configured in `router/roles/vpn/defaults/main.yml`) to `192.168.0.100` in your company or home wifi router
+3) For VPN setup port forwarding (sometimes called "virtual server") in your company or home wifi router for port `1194` (or whatever you configured in `router/roles/vpn/defaults/main.yml`) to `192.168.0.100`
 4) Add `192.168.0.100` as the first nameserver for the (WiFi) connection of your workstation using system settings
 5) Reboot `ceil-router` to pickup its IP address via `make router-reboot` - it will register via ZeroConf/Avahi on your workstation as `ceil-router.local`
 6) Check via `make router-check-ip` if the IP address has been picked up
