@@ -223,12 +223,12 @@ Notes:
 
 ## Obstacles 
 
-* Examples for setting up K8S on RPis mostly outdated and/or incomplete or making undocumented assumptions or not using Ansible correctly => full rewrite
+* Examples for setting up K8S on bare metal mostly outdated and/or incomplete or making undocumented assumptions or not using Ansible correctly => full rewrite
 * Current Kernel of hypriot does not setup pid cgroup which is used by newer K8S for QoS => downgrade K8S
 * RBAC is rather new and not yet accounted for in deployment procedures of all tools and services => amend
 * Traefik image of hypriot outdated, dashboard not useable => use original image given manifest lists 
 * Some services do not yet compile docker images for ARM and/or do not use docker manifest lists properly => google for alternative images or wait for CNCF
-* Mosts ansible playbooks do not provide a teardown role => build yourself
+* Most ansible playbooks do not provide a teardown role => build yourself
 
 ## Additional references
 
