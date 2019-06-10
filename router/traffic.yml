@@ -1,6 +1,0 @@
-- hosts: all
-  tasks:
-  - name: "Simulate traffic"
-    shell: "timeout 30 python /home/admin/PiTraffic/TrafficTest.py"
-    become: true
-    ignore_errors: true
