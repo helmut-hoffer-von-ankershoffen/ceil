@@ -3,8 +3,8 @@
     - base
     - thumb-drive
     - routing
-    - vpn
     - ddns
     - firewall
     - docker-registry-mirror
     - docker-registry-private
+    - vpn

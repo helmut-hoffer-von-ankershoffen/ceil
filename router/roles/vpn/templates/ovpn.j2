@@ -39,7 +39,7 @@ proto udp
 # The hostname/IP and port of the server.
 # You can have multiple remote entries
 # to load balance between the servers.
-remote {{ openvpn.host_public }} 1194
+remote {{ openvpn.host_public }} {{ openvpn.port }}
 
 # Choose a random host from the remote
 # list for load-balancing.  Otherwise
