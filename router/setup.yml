@@ -1,10 +1,47 @@
-- hosts: all
+- name: Base
+  hosts: all
   roles:
-    - base
-    - thumb-drive
-    - routing
-    - ddns
-    - firewall
-    - docker-registry-mirror
-    - docker-registry-private
-    - vpn
+    - role: base
+  tags: [setup,base]
+
+- name: Thumb drive
+  hosts: all
+  roles:
+    - role: thumb-drive
+  tags: [setup,thumb_drive]
+
+- name: Routing
+  hosts: all
+  roles:
+    - role: routing
+  tags: [setup,routing]
+
+- name: DDNS
+  hosts: all
+  roles:
+    - role: ddns
+  tags: [setup,ddns]
+
+- name: Firewall
+  hosts: all
+  roles:
+    - role: firewall
+  tags: [setup,firewall]
+
+- name: Docker registry mirror
+  hosts: all
+  roles:
+    - role: docker-registry-mirror
+  tags: [setup,docker_registry_mirror]
+
+- name: Docker private registry
+  hosts: all
+  roles:
+    - role: docker-registry-private
+  tags: [setup,docker_registry_private]
+
+- name: VPN
+  hosts: all
+  roles:
+    - role: vpn
+  tags: [setup,vpn]

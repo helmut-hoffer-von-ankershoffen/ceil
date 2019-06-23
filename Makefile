@@ -65,7 +65,31 @@ router-check-ip: ## Check IP addresss of router
 	cd router && ansible -a "hostname --ip" all
 
 router-setup: ## Setup router, .ovpn file will be downloaded into router/out
-	cd router && ansible-playbook setup.yml
+	cd router && ansible-playbook setup.yml --tags "setup"
+
+router-base: ## Setup base
+	cd router && ansible-playbook setup.yml --tags "base"
+
+router-thumb-drive: ## Setup thumb drive
+	cd router && ansible-playbook setup.yml --tags "thumb_drive"
+
+router-routing: ## Setup routing
+	cd router && ansible-playbook setup.yml --tags "routing"
+
+router-ddns: ## Setup DDNS
+	cd router && ansible-playbook setup.yml --tags "ddns"
+
+router-firewall: ## Setup Firewall
+	cd router && ansible-playbook setup.yml --tags "firewall"
+
+router-docker-registry-mirror: ## Setup docker registry mirror
+	cd router && ansible-playbook setup.yml --tags "docker_registry_private"
+
+router-docker-registry-private: ## Setup private docker registry
+	cd router && ansible-playbook setup.yml --tags "docker_registry_private"
+
+router-base: ## Setup VPN
+	cd router && ansible-playbook setup.yml --tags "vpn"
 
 one-ssh: ## ssh to one
 	ssh root@max-one.dev

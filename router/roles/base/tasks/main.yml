@@ -73,9 +73,11 @@
     - ipvsadm
     - docker-ce
 
-- name: "Install libraries"
+- name: Install libraries
   pip:
-    name: docker
+    name:
+      - docker
+      - docker-compose
 
 - name: "Reboot"
   shell: sleep 5 && sync && shutdown -r now "Ansible Reboot"
