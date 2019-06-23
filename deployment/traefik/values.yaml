@@ -174,7 +174,7 @@ acme:
   enabled: true
   email: helmuthva@googlemail.com
   onHostRule: true
-  staging: true
+  staging: false
   logging: true
   # Configure a Let's Encrypt certificate to be managed by default.
   # This is the only way to request wildcard certificates (works only with dns challenge).
@@ -197,7 +197,7 @@ acme:
   ## change. Users of this chart should strongly consider making the switch to
   ## the recommended "tls-alpn-01" (avaialbe since v1.7), dns-01 or http-01
   ## (available since v1.5) challenge.
-  challengeType: http-01
+  challengeType: "tls-alpn-01"
   ## Configure dnsProvider to perform domain verification using dns challenge
   ## Applicable only if using the dns-01 challenge type
   delayBeforeCheck: 0
