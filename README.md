@@ -47,7 +47,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 - [x] Raise Firewall using ufw
 - [x] Act as Docker registry mirror using official docker image `registry:2`
 - [x] Act as private Docker registry
-- [x] Act as http(s) proxy
+- [x] Act as http(s) proxy from router to k8s ingress
 - [ ] kail and harbor
 
 ### Phase 4: PiWatch
