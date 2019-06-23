@@ -2,5 +2,4 @@
 
 cd "$(dirname "$0")"
 
-kubectl label node max-two.dev ingress-controller=traefik --overwrite=true
-kubectl apply -f traefik.yaml
+helm install stable/traefik --name traefik --namespace kube-system  -f values.yaml

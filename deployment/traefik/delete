@@ -2,5 +2,4 @@
 
 cd "$(dirname "$0")"
 
-kubectl delete -f traefik.yaml || true
-kubectl label node max-two.dev ingress-controller- || true
+helm delete --purge traefik || true

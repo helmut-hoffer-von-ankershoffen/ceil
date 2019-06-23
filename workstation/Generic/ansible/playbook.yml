@@ -20,9 +20,9 @@
         - { name: max-two.dev, ip: 12.0.0.102 }
         - { name: max-three, ip: 12.0.0.103 }
         - { name: max-three.dev, ip: 12.0.0.103 }
-        - { name: httpd.max.local, ip: 12.0.0.102 }
-        - { name: traefik-ui.max.local, ip: 12.0.0.102 }
-        - { name: prometheus.max.local, ip: 12.0.0.102 }
-        - { name: alertmanager.max.local, ip: 12.0.0.102 }
-        - { name: pushgateway.max.local, ip: 12.0.0.102 }
-        - { name: grafana.max.local, ip: 12.0.0.102 }
+        - { name: httpd.max.local, ip: 12.0.0.201 }
+        - { name: traefik-ui.max.local, ip: 12.0.0.201 }
+        - { name: prometheus.max.local, ip: 12.0.0.201 }
+        - { name: alertmanager.max.local, ip: 12.0.0.201 }
+        - { name: pushgateway.max.local, ip: 12.0.0.201 }
+        - { name: grafana.max.local, ip: 12.0.0.201 }
