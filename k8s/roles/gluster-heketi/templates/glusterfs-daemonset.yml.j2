@@ -38,6 +38,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: glusterfs
         volumeMounts:
+        - name: glusterfs-docker-sock
+          mountPath: "/var/run/docker.sock"
         - name: glusterfs-heketi
           mountPath: "/var/lib/heketi"
         - name: glusterfs-run
@@ -74,6 +76,9 @@ spec:
             - "-c"
             - systemctl status glusterd.service
       volumes:
+      - name: glusterfs-docker-sock
+        hostPath:
+          path: "/var/run/docker.sock"
       - name: glusterfs-heketi
         hostPath:
           path: "/var/lib/heketi"
