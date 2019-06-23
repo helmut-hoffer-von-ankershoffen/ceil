@@ -14,6 +14,8 @@
           {{ item.ip }} {{ item.name }}
         marker: "# {mark} max {{ item.name }}"
       with_items:
+        - { name: max-one, ip: 192.168.0.111 }
+        - { name: max-one.dev, ip: 192.168.0.111 }
         - { name: max-two, ip: 12.0.0.102 }
         - { name: max-two.dev, ip: 12.0.0.102 }
         - { name: max-three, ip: 12.0.0.103 }

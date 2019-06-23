@@ -31,6 +31,10 @@ prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, inst
 	ansible-galaxy install -r router/requirements.yaml || true
 	ansible-galaxy install -r k8s/requirements.yaml || true
 
+prepare-mac-hosts: ## Update /etc/hosts on mac
+	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
+
+
 router-provision: ## Provision router for boot (flash SD card with OS)
 	host/provision/router
 
