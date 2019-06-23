@@ -90,7 +90,7 @@ secretFiles: {}
 
 ssl:
   enabled: true
-  enforced: true
+  enforced: false
   permanentRedirect: false
   upstream: false
   insecureSkipVerify: false
@@ -183,7 +183,9 @@ acme:
     # List of sets of main and (optional) SANs to generate for
     # for wildcard certificates see https://docs.traefik.io/configuration/acme/#wildcard-domains
     domainsList:
-    # - main: "*.example.com"
+    - main: "router.maxxx.pro"
+    - sans:
+      - "vpn.maxxx.pro"
     # - sans:
     #   - "example.com"
     # - main: "*.example2.com"
@@ -197,7 +199,7 @@ acme:
   ## change. Users of this chart should strongly consider making the switch to
   ## the recommended "tls-alpn-01" (avaialbe since v1.7), dns-01 or http-01
   ## (available since v1.5) challenge.
-  challengeType: "tls-alpn-01"
+  challengeType: "http-01"
   ## Configure dnsProvider to perform domain verification using dns challenge
   ## Applicable only if using the dns-01 challenge type
   delayBeforeCheck: 0
