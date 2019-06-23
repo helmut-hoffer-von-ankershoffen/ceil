@@ -4,4 +4,4 @@ cd "$(dirname "$0")"
 
 helm repo add sp https://stefanprodan.github.io/k8s-podinfo
 kubectl create namespace podinfo
-helm install --name podinfo --namespace podinfo sp/podinfo -f values.yaml
+helm install --name podinfo csp/podinfo -f values.yaml

@@ -14,9 +14,9 @@ service:
   port: 4040
 
 expose:
-  service: ga-podinfo:9898
+  service: httpd:8080
 
-token: 4i3rDinhLqMHtvez71N9S_38rkS7onwv77VFNZTaUR6
+token: 3KyGMthBXqqzLX6dAsA5C_5x8kyhxVbb1TtBwmt48uW
 
 nodeSelector: {}
 

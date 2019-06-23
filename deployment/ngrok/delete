@@ -3,4 +3,3 @@
 cd "$(dirname "$0")"
 
 helm delete --purge ngrok || true
-kubectl delete namespace ngrok || true
