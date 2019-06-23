@@ -88,7 +88,7 @@ router-docker-registry-mirror: ## Setup docker registry mirror
 router-docker-registry-private: ## Setup private docker registry
 	cd router && ansible-playbook setup.yml --tags "docker_registry_private"
 
-router-base: ## Setup VPN
+router-vpn: ## Setup VPN
 	cd router && ansible-playbook setup.yml --tags "vpn"
 
 one-ssh: ## ssh to one
@@ -240,9 +240,9 @@ piphp-deploy: ## Deploy piphp
 piphp-delete: ## Delete piphp
 	deployment/piphp/delete
 
-all-deploy: metalb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy ## Execute all deployments
+all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy ## Execute all deployments
 
-all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metalb-delete ## Delete all deployments
+all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments
 
 setup: thumb-wipe k8s-setup all-deploy  ## Setup K8S, deploy all - DANGER: wipes thumb drives
 
