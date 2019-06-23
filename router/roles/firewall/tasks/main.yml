@@ -47,20 +47,6 @@
     rule: allow
     state: enabled
 
-- name: "Allow HTTP"
-  ufw:
-    direction: in
-    port: http
-    rule: allow
-    state: enabled
-
-- name: "Allow HTTPS"
-  ufw:
-    direction: in
-    port: https
-    rule: allow
-    state: enabled
-
 - name: "Allow LLMNR"
   ufw:
     direction: in
