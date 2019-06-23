@@ -93,9 +93,9 @@ ssl:
   enforced: true
   permanentRedirect: false
   upstream: false
-  insecureSkipVerify: true
+  insecureSkipVerify: false
   generateTLS: true
-  defaultCN: "*.max.local"
+  defaultCN: "router.maxxx.pro"
     # defaultCN: "example.com"
   # or *.example.com
   defaultSANList: []
@@ -171,11 +171,11 @@ kvprovider:
 
 
 acme:
-  enabled: false
+  enabled: true
   email: helmuthva@googlemail.com
   onHostRule: true
   staging: true
-  logging: false
+  logging: true
   # Configure a Let's Encrypt certificate to be managed by default.
   # This is the only way to request wildcard certificates (works only with dns challenge).
   domains:
@@ -197,13 +197,13 @@ acme:
   ## change. Users of this chart should strongly consider making the switch to
   ## the recommended "tls-alpn-01" (avaialbe since v1.7), dns-01 or http-01
   ## (available since v1.5) challenge.
-  challengeType: tls-sni-01
+  challengeType: http-01
   ## Configure dnsProvider to perform domain verification using dns challenge
   ## Applicable only if using the dns-01 challenge type
   delayBeforeCheck: 0
-  resolvers: []
-    # - 1.1.1.1:53
-  # - 8.8.8.8:53
+  resolvers:
+  - 1.1.1.1:53
+  - 8.8.8.8:53
   dnsProvider:
     name: nil
     existingSecretName: ""
@@ -348,7 +348,7 @@ gzip:
   enabled: true
 traefikLogFormat: json
 accessLogs:
-  enabled: false
+  enabled: true
   ## Path to the access logs file. If not provided, Traefik defaults it to stdout.
   # filePath: ""
   format: common  # choices are: common, json

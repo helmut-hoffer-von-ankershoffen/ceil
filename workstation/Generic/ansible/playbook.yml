@@ -15,11 +15,11 @@
         marker: "# {mark} max {{ item.name }}"
       with_items:
         - { name: max-one, ip: 192.168.0.111 }
-        - { name: max-one.dev, ip: 192.168.0.111 }
+        - { name: max-one.local, ip: 192.168.0.111 }
         - { name: max-two, ip: 12.0.0.102 }
-        - { name: max-two.dev, ip: 12.0.0.102 }
+        - { name: max-two.local, ip: 12.0.0.102 }
         - { name: max-three, ip: 12.0.0.103 }
-        - { name: max-three.dev, ip: 12.0.0.103 }
+        - { name: max-three.local, ip: 12.0.0.103 }
         - { name: httpd.max.local, ip: 12.0.0.201 }
         - { name: traefik-ui.max.local, ip: 12.0.0.201 }
         - { name: prometheus.max.local, ip: 12.0.0.201 }

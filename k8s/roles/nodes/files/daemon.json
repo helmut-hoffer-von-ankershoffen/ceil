@@ -1,6 +1,6 @@
 {
   "labels": [ "os=linux", "arch=amd64" ],
-  "registry-mirrors": ["http://max-one.dev:5000"],
-  "insecure-registries": ["max-one.dev:5000","max-one.dev:5001"],
+  "registry-mirrors": ["http://max-one.local:5000"],
+  "insecure-registries": ["max-one.local:5000","max-one.local:5001"],
   "experimental": true
 }

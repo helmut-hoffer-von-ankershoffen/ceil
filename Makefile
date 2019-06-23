@@ -34,7 +34,7 @@ prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, inst
 prepare-ansible: ## Install ansible requirementss
 	ansible-galaxy install -r router/requirements.yaml || true
 
-prepare-mac-hosts: ## Update /etc/hosts on mac
+prepare-hosts: ## Update /etc/hosts
 	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 
 
@@ -65,7 +65,7 @@ router-df: ## Show df of router
 router-uptime: ## Show uptime of router
 	cd router && ansible -a uptime all
 
-router-reboot: ## Reboot max-router
+router-reboot: ## Reboot max-one
 	cd router && ansible -a "shutdown -r now" all
 
 router-check-ip: ## Check IP addresss of router
@@ -102,13 +102,13 @@ router-haproxy: ## Setup HAProxy
 	cd router && ansible-playbook setup.yml --tags "haproxy"
 
 one-ssh: ## ssh to one
-	ssh root@max-one.dev
+	ssh root@max-one.local
 
 two-ssh: ## ssh to two
-	ssh root@max-two.dev
+	ssh root@max-two.local
 
 three-ssh: ## ssh to three
-	ssh root@max-three.dev
+	ssh root@max-three.local
 
 k8s-ping: ## Ping nodes
 	cd k8s && ansible -m ping all

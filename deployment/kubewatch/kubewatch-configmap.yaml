@@ -7,7 +7,7 @@ data:
     namespace: ""
     handler:
       webhook:
-        url: "http://ceil-router.dev/traffic/kubewatch-webhook"
+        url: "http://ceil-router.local/traffic/kubewatch-webhook"
       slack:
         token: ""
         channel: ""

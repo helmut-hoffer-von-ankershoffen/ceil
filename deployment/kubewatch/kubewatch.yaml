@@ -19,9 +19,9 @@ spec:
         - name: KW_SLACK_TOKEN
           value: ''
         - name: KW_WEBHOOK_URL
-          value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
+          value: 'http://ceil-router.local/traffic/kubewatch-webhook'
         - name: WEBHOOK_URL
-          value: 'http://ceil-router.dev/traffic/kubewatch-webhook'
+          value: 'http://ceil-router.local/traffic/kubewatch-webhook'
   restartPolicy: Always
   serviceAccountName: kubewatch
   volumes:

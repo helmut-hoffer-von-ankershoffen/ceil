@@ -139,7 +139,7 @@ Notes:
 
 ## Setup router
 
-1) Make a DHCP reservation for `max-router` in your home or company WiFi router with IP address `192.168.0.111` -  it will register as `max-one` at your WiFi router
+1) Make a DHCP reservation for `max-one` in your home or company WiFi router with IP address `192.168.0.111` -  it will register as `max-one` at your WiFi router
 2) Set up a static route to the k8s subnet `12.0.0.0` with `192.168.0.111` as gateway in your company or home wifi router - if this is not achievable use `make workstation-route-add` to add a route on your workstation.
 3) For VPN setup port forwarding (sometimes called "virtual server") in your company or home wifi router for port `1194` (or whatever you configured in  `router/roles/vpn/defaults/main.yml`) to `192.168.0.111`
 4) For http(s) proxy to k8s ingress using HAProxy setup port forwarding (sometimes called "virtual server") in your company or home wifi router for ports `80` and `443` to `192.168.0.111`
@@ -151,9 +151,10 @@ Notes:
 
 Notes:
 - Danger: wipes thumb drive in router
-- It might take some time until the Zeroconf/Avahi distributed the name `max-router.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
+- It might take some time until the Zeroconf/Avahi distributed the name `max-one.local` in your network. You can check by ssh'ing into the router via `make router-ssh`
 - The router will manage / route to the subnet `12.0.0.[0-128]` (`12/25`) the K8S nodes will life in and act as their DHCP and DNS server
-- Furthermore the router acts as an OpenVPN server and updates the IP address of `vpn.max.pro` via DDNS
+- The router updates the IP address of `router.maxxx.pro` via DDNS
+- Furthermore the router acts as an OpenVPN server
 - After setting up the router wait for a minute to check if the k8s nodes have picked up the designated IPs using `make k8s-check-ip`
 - After the k8s nodes picked up their IP addresses you can ssh into them using `make {one,two,three}-ssh`
 - If on your workstation `nslookup max-{one,two,three}.dev` works but `ping max-{one,two,three}.dev` does not, reestablish the (WiFi) connection of your workstation

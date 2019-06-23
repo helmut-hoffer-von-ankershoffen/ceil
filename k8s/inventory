@@ -1,11 +1,11 @@
 [all]
-max-one.dev         ansible_host=12.0.0.101
-max-two.dev         ansible_host=12.0.0.102
-max-three.dev       ansible_host=12.0.0.103
+max-one.local         ansible_host=12.0.0.101
+max-two.local         ansible_host=12.0.0.102
+max-three.local       ansible_host=12.0.0.103
 
 [master]
-max-one.dev         ansible_host=12.0.0.101
+max-one.local         ansible_host=12.0.0.101
 
 [nodes]
-max-two.dev         ansible_host=12.0.0.102
-max-three.dev       ansible_host=12.0.0.103
+max-two.local         ansible_host=12.0.0.102
+max-three.local       ansible_host=12.0.0.103
