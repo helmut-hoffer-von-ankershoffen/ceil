@@ -72,34 +72,34 @@ router-check-ip: ## Check IP addresss of router
 	cd router && ansible -a "hostname --ip" all
 
 router-setup: ## Setup router, .ovpn file will be downloaded into router/out
-	cd router && ansible-playbook setup.yml --tags "setup"
+	cd router && ansible-playbook main.yml --tags "setup"
 
 router-base: ## Setup base
-	cd router && ansible-playbook setup.yml --tags "base"
+	cd router && ansible-playbook main.yml --tags "base"
 
 router-thumb-drive: ## Setup thumb drive
-	cd router && ansible-playbook setup.yml --tags "thumb_drive"
+	cd router && ansible-playbook main.yml --tags "thumb_drive"
 
 router-routing: ## Setup routing
-	cd router && ansible-playbook setup.yml --tags "routing"
+	cd router && ansible-playbook main.yml --tags "routing"
 
 router-ddns: ## Setup DDNS
-	cd router && ansible-playbook setup.yml --tags "ddns"
+	cd router && ansible-playbook main.yml --tags "ddns"
 
 router-firewall: ## Setup Firewall
-	cd router && ansible-playbook setup.yml --tags "firewall"
+	cd router && ansible-playbook main.yml --tags "firewall"
 
 router-docker-registry-mirror: ## Setup docker registry mirror
-	cd router && ansible-playbook setup.yml --tags "docker_registry_private"
+	cd router && ansible-playbook main.yml --tags "docker_registry_private"
 
 router-docker-registry-private: ## Setup private docker registry
-	cd router && ansible-playbook setup.yml --tags "docker_registry_private"
+	cd router && ansible-playbook main.yml --tags "docker_registry_private"
 
 router-vpn: ## Setup VPN
-	cd router && ansible-playbook setup.yml --tags "vpn"
+	cd router && ansible-playbook main.yml --tags "vpn"
 
 router-haproxy: ## Setup HAProxy
-	cd router && ansible-playbook setup.yml --tags "haproxy"
+	cd router && ansible-playbook main.yml --tags "haproxy"
 
 one-ssh: ## ssh to one
 	ssh root@max-one.local
