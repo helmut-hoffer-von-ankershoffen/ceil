@@ -97,6 +97,9 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 - [ ] Prepare a workshop presentation
 - [ ] Educate peers in meetups
 
+### Phase 12: Evaluation
+- [ ] Evaluate with commercial projects in development
+
 ## Layers and tools
 
 * CloudOps
