@@ -1,5 +1,76 @@
 ---
 
+# Thumb drive
+
 thumb:
   device: /dev/sdc
   partition: /dev/sdc1
+
+
+# HAProxy
+
+haproxy_package_name: haproxy
+haproxy_socket: /var/lib/haproxy/stats
+haproxy_chroot: /var/lib/haproxy
+haproxy_user: haproxy
+haproxy_group: haproxy
+
+haproxy_frontends:
+- name: 'http'
+  address: '*:80'
+  mode: 'tcp'
+  backend: 'http'
+  timeout client: 10s
+- name: 'https'
+  address: '*:443'
+  mode: 'tcp'
+  backend: 'https'
+  timeout client: 10s
+
+haproxy_backends:
+- name: 'http'
+  # All fields are optional apart from servers
+  mode: 'tcp'
+  servers:
+    - name: ingress
+      address: 12.0.0.201:80
+- name: 'https'
+  # All fields are optional apart from servers
+  mode: 'tcp'
+  servers:
+    - name: ingress
+      address: 12.0.0.201:443
+
+# Extra global vars (see README for example usage).
+haproxy_global_vars: []
+
+haproxy_defaults_options:
+  - dontlognull
+
+haproxy_defaults_timeouts:
+  - connect 5000
+  - client  50000
+  - server  50000
+
+# Set this to True to configure syslog file logging
+haproxy_syslog_enable: false
+
+# If you want to log to a file you need to configure rsyslog, but this may
+# have global effects on syslog
+# This variable is for convenience, set to True if this is the only role
+# that will be configuring rsyslog
+haproxy_syslog_configure_udp: false
+
+# The syslog destinations
+haproxy_syslog_dest: local2
+haproxy_syslog_dest_tcp: local3
+haproxy_syslog_dest_http: local4
+
+# Rotate log files at this interval
+haproxy_logrotate_interval: daily
+
+# Number of backlog files to keep
+haproxy_logrotate_backlog_size: 366
+
+# haproxy template source
+haproxy_cfg_template: haproxy.cfg.j2

@@ -1,0 +1,25 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- include_role:
+    name: ome.haproxy
+
+- name: "Allow HTTP"
+  ufw:
+    direction: in
+    port: 80
+    proto: tcp
+    rule: allow
+    state: enabled
+
+- name: "Allow HTTPS"
+  ufw:
+    direction: in
+    port: '443'
+    rule: allow
+    state: enabled
+

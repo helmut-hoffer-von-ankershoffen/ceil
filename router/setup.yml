@@ -45,3 +45,9 @@
   roles:
     - role: vpn
   tags: [setup,vpn]
+
+- name: HAProxy
+  hosts: all
+  roles:
+    - role: haproxy
+  tags: [setup,haproxy]

@@ -31,6 +31,9 @@ prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, inst
 	ansible-galaxy install -r router/requirements.yaml || true
 	ansible-galaxy install -r k8s/requirements.yaml || true
 
+prepare-ansible: ## Install ansible requirementss
+	ansible-galaxy install -r router/requirements.yaml || true
+
 prepare-mac-hosts: ## Update /etc/hosts on mac
 	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 
@@ -94,6 +97,9 @@ router-docker-registry-private: ## Setup private docker registry
 
 router-vpn: ## Setup VPN
 	cd router && ansible-playbook setup.yml --tags "vpn"
+
+router-haproxy: ## Setup HAProxy
+	cd router && ansible-playbook setup.yml --tags "haproxy"
 
 one-ssh: ## ssh to one
 	ssh root@max-one.dev
