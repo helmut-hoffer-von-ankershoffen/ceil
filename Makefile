@@ -25,11 +25,13 @@ help: ## This help dialog.
 
 prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, install packages via homebrew, update /etc/hosts etc.)
 	workstation/MacOSX/bootstrap
-	ansible-galaxy install -r workstation/MacOSX/ansible/requirements.yml
-	ansible-playbook -i "localhost," workstation/MacOSX/ansible/playbook.yml --ask-become-pass
-	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
+	source ~/.bash_profile && rbenv install --skip-existing 2.2.2
+	ansible-galaxy install -r workstation/macOS/ansible/requirements.yml
+	ansible-playbook -i "localhost," workstation/macOS/ansible/playbook.yml --ask-become-pass
+	ansible-playbook -i "localhost," workstation/generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 	ansible-galaxy install -r router/requirements.yaml || true
 	ansible-galaxy install -r k8s/requirements.yaml || true
+	source ~/.bash_profile && $(SHELL) -c 'cd workflow/requirements/macOS/docker; . ./daemon_check.sh'
 
 prepare-ansible: ## Install ansible requirementss
 	ansible-galaxy install -r router/requirements.yaml || true
@@ -37,6 +39,8 @@ prepare-ansible: ## Install ansible requirementss
 prepare-hosts: ## Update /etc/hosts
 	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 
+prepare-docker: ## Prepare Docker on workstation
+	source ~/.bash_profile && $(SHELL) -c 'cd workflow/requirements/macOS/docker; . ./daemon_check.sh'
 
 router-provision: ## Provision router for boot (flash SD card with OS)
 	host/provision/router

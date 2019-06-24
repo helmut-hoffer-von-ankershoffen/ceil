@@ -1,0 +1,45 @@
+---
+
+homebrew_taps:
+  - homebrew/core
+  - homebrew/services
+  - blackfireio/blackfire
+  - jenkins-x/jx
+
+homebrew_installed_packages:
+  - ansible
+  - awscli
+  - bash-completion
+  - ctop
+  - curl
+  - git
+  - gpg
+  - jx
+  - kubernetes-cli
+  - kubernetes-helm
+  - pv
+  - rsync
+  - skaffold
+  - unzip
+  - wget
+
+homebrew_cask_appdir: /Applications
+
+homebrew_cask_apps:
+  - docker                  # Docker for Mac
+  - sublime-text            # Simple editor
+  - sequel-pro              # UI for SQL
+  - tunnelblick             # VPN Client
+  - jetbrains-toolbox       # Installer for products from Jetbrain etc.
+
+composer_packages: []
+
+gem_packages:
+  - name: bundler
+  - name: docker-sync
+
+npm_packages: []
+
+pip_packages: []
+
+pear_packages: []

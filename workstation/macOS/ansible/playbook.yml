@@ -10,6 +10,7 @@
     - role: geerlingguy.homebrew
       homebrew_upgrade_all_packages: yes
       tags: ['tools']
+      ignore_errors: yes
 
   tasks:
 
