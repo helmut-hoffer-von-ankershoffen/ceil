@@ -3,9 +3,8 @@
 # Thumb drive
 
 thumb:
-  device: /dev/sdc
-  partition: /dev/sdc1
-
+  idVendor: '0781'
+  idProduct: '5583'
 
 # HAProxy
 

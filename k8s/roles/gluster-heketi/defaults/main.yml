@@ -18,7 +18,7 @@ k8s_heketi_gluster_tolerations:
 k8s_heketi_gluster_nodeselector:
 
 # The underlying raw storage device
-k8s_heketi_gluster_storage_device: "/dev/sdb"
+k8s_heketi_gluster_storage_device: "/dev/gluster"
 
 # Gluster docker image
 k8s_heketi_gluster_image: "gluster/gluster-centos:latest"

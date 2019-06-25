@@ -5,6 +5,28 @@
     that:
       - ansible_play_hosts == ansible_play_hosts_all
 
+- name: "Fixed name for thumb drive to persist Docker volumes"
+  template:
+    src: thumb-docker_volumes.rules.j2
+    dest: /lib/udev/rules.d/thumb-docker_volumes.rules
+  register: thumbDevice
+
+- name: "Reboot"
+  shell: sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: thumbDevice.changed
+  register: reboot
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 240
+  when: reboot.changed
+
 - name: "Stop docker"
   service:
     name: docker
@@ -14,13 +36,11 @@
 - name: "Unmount"
   mount:
     path: /mnt/thumb
-    src: "{{ thumb.partition }}"
-    fstype: ext4
     state: unmounted
 
 - name: "Wipe signature and partitions"
   command: >
-    wipefs --all --force {{ thumb.device }}
+    wipefs --all --force /dev/docker_volumes
 
 - name: "apt-get update"
   apt:
@@ -37,19 +57,19 @@
 
 - name: "Partition"
   parted:
-    device: "{{ thumb.device }}"
+    device: "/dev/docker_volumes"
     number: 1
     state: present
 
 - name: "Create a ext4 filesystem"
   filesystem:
     fstype: ext4
-    dev: "{{ thumb.partition }}"
+    dev: "/dev/docker_volumes1"
 
 - name: "Mount"
   mount:
     path: /mnt/thumb
-    src: "{{ thumb.partition }}"
+    src: "/dev/docker_volumes1"
     fstype: ext4
     state: mounted
     opts: nofail

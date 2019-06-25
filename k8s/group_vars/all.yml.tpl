@@ -1,4 +1,6 @@
-# docker_version: "18.06.3~ce~3-0~raspbian"
+thumb:
+    idVendor: USB-VENDOR-ID
+    idProduct: USB-PRODUCT-ID
 
 kubernetes_token: YOUR_KUBERNETES_TOKEN
 

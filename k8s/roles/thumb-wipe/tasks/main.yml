@@ -1,0 +1,44 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: "Fixed name for thumb drive to persist gluster bricks"
+  template:
+    src: thumb-gluster.rules.j2
+    dest: /lib/udev/rules.d/thumb-gluster.rules
+  register: thumbDevice
+
+- name: "Reboot"
+  shell: sync && shutdown -r now "Ansible Reboot"
+  async: 1
+  poll: 0
+  ignore_errors: true
+  when: thumbDevice.changed
+  register: reboot
+
+- name: "Wait for up"
+  wait_for_connection:
+    delay: 5
+    connect_timeout: 5
+    sleep: 1
+    timeout: 240
+  when: reboot.changed
+
+- name: "apt-get update"
+  apt:
+    update_cache: yes
+    autoclean: yes
+    autoremove: yes
+    cache_valid_time: 86400
+
+- name: "Install prerequisites"
+  apt:
+    state: latest
+    pkg:
+      - parted
+- name: "Wipe signature and partitions of thumb drives"
+  command: >
+    wipefs --all --force /dev/gluster
