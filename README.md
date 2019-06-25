@@ -60,7 +60,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 - [x] Deploy production ready Magento and Wordpress stacks
 - [x] Automate development workflows using Skaffold  
 
-### Phase 6: PiPHP (separate repos)
+### Phase 6: PiPHP (separate repo)
 
 - [ ] Deploy amd64 version of PiPHP
 - [ ] Automate dev-workflow using Skaffold  
