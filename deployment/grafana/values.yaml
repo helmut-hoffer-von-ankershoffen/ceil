@@ -9,7 +9,7 @@ serviceAccount:
 
 replicas: 1
 
-deploymentStrategy: RollingUpdate
+deploymentStrategy: { "type": "RollingUpdate", "rollingUpdate": null }
 
 readinessProbe:
   httpGet:

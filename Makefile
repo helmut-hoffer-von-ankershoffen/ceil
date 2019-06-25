@@ -1,4 +1,5 @@
-.PHONY: prepare-mac k8s-uptime k8s-df k8s-reboot one-ssh two-ssh three-ssh setup teardown k8s-setup k8s-remove k8s-proxy k8s-dashboard-bearer-token-show k8s-dashboard-open
+.DEFAULT_GOAL := help
+SHELL := /bin/bash
 
 help: ## This help dialog.
 	@IFS=$$'\n' ; \
@@ -254,9 +255,15 @@ piphp-deploy: ## Deploy piphp
 piphp-delete: ## Delete piphp
 	deployment/piphp/delete
 
-all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
+jx-deploy: ## Deploy Jenkins X
+	deployment/jx/deploy
 
-all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments
+jx-delete: ## Delete Jenkins X
+	deployment/jx/delete
+
+all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy jx-deploy ## Execute all deployments
+
+all-delete: jx-delete ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments
 
 setup: thumb-wipe k8s-setup all-deploy  ## Setup K8S, deploy all - DANGER: wipes thumb drives
 

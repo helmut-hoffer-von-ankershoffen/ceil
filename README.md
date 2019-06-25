@@ -53,40 +53,44 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 ### Phase 4: PiWatch
 
 - [x] Deploy kubewatch to push K8S events to arbitrary webhook
-- [ ] Configure to push to PiTraffic of ceil cluster
+- [ ] Configure to push to PiTraffic of `ceil` cluster (RPi)
 
-### Phase 5: PiPHP
+### Phase 5: Magento and Wordpress (separate repos)
+
+- [x] Deploy production ready Magento and Wordpress stacks
+- [x] Automate development workflows using Skaffold  
+
+### Phase 6: PiPHP (separate repos)
 
 - [ ] Deploy amd64 version of PiPHP
-- [ ] Automate workflow
+- [ ] Automate dev-workflow using Skaffold  
 
-### Phase 6: Auto-Scaling
+### Phase 7: Auto-Scaling
 - [ ] Autoscaling using HPA and custom metrics
 - [ ] Zero-Scaling using Osiris
 - [ ] Relevant dashboards in grafana
 
-### Phase 7: Mesh-Networking
+### Phase 8: Mesh-Networking
 - [ ] Istio for Mesh-Networking
 - [ ] Visibility tools
 - [ ] Additional tools
 
-### Phase 8: GitOps and Progressive Delivery
+### Phase 9: GitOps and Progressive Delivery
 
 - [ ] Flagger for Helm using mesh network
 - [ ] Canary deployments using mesh network
 - [ ] ...
 
-### Phase 9: CI and emphemeral test environments
-- [ ] Setup CI using JenkinsX
+### Phase 10: CI and emphemeral test environments
+- [x] Setup CI using JenkinsX
 - [ ] ...
 
-
-### Phase 10: A/B testing
+### Phase 11: A/B testing
 
 - [ ] Using mesh network
 - [ ] ...
 
-### Phase 11: Sharing is caring
+### Phase 12: Sharing is caring
 
 - [x] Open source under GPlv3
 - [x] Links to useful material for further studies
@@ -97,8 +101,9 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 - [ ] Prepare a workshop presentation
 - [ ] Educate peers in meetups
 
-### Phase 12: Evaluation
+### Phase 13: Evaluation
 - [ ] Evaluate with commercial projects in development
+
 
 ## Layers and tools
 
