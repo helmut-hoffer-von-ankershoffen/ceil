@@ -1,0 +1,3 @@
+#!/bin/sh 
+
+iptables -t nat -A POSTROUTING -s {{ openvpn.server_subnet }}/{{ openvpn.server_netmask }} -o wlp2s0 -j SNAT --to-source {{ ansible_default_ipv4.address }}

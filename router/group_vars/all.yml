@@ -73,3 +73,9 @@ haproxy_logrotate_backlog_size: 366
 
 # haproxy template source
 haproxy_cfg_template: haproxy.cfg.j2
+
+
+# projects
+
+project_dirs:
+  - /Projects/twentysteps/hsk2/shop

@@ -51,3 +51,9 @@
   roles:
     - role: haproxy
   tags: [setup,haproxy]
+
+- name: Projects
+  hosts: all
+  roles:
+    - role: projects
+  tags: [setup,projects]

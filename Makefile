@@ -106,6 +106,9 @@ router-vpn: ## Setup VPN
 router-haproxy: ## Setup HAProxy
 	cd router && ansible-playbook main.yml --tags "haproxy"
 
+router-projects: ## Setup projects
+	cd router && ansible-playbook main.yml --tags "projects"
+
 one-ssh: ## ssh to one
 	ssh root@max-one.local
 
@@ -139,7 +142,7 @@ k8s-proxy: ## Open proxy
 k8s-dashboard-bearer-token-show: ## Show dashboard bearer token
 	k8s/scripts/dashboard-bearer-token-show
 
-k8s-dashboard-open: ## Open Dashboarrd
+k8s-dashboard-open: ## Open Dashboard
 	python -mwebbrowser http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=default
 
 k8s-remove: ## Remove previous installation of Kubernetes cluster
@@ -261,9 +264,9 @@ jx-deploy: ## Deploy Jenkins X
 jx-delete: ## Delete Jenkins X
 	deployment/jx/delete
 
-all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy jx-deploy ## Execute all deployments
+all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
 
-all-delete: jx-delete ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments
+all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments
 
 setup: thumb-wipe k8s-setup all-deploy  ## Setup K8S, deploy all - DANGER: wipes thumb drives
 
