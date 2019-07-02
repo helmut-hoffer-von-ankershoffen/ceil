@@ -106,6 +106,9 @@ router-vpn: ## Setup VPN
 router-haproxy: ## Setup HAProxy
 	cd router && ansible-playbook main.yml --tags "haproxy"
 
+router-borg: ## Setup Borg backup server
+	cd router && ansible-playbook main.yml --tags "borg"
+
 one-ssh: ## ssh to one
 	ssh root@max-one.local
 

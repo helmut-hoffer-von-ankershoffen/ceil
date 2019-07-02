@@ -51,3 +51,9 @@
   roles:
     - role: haproxy
   tags: [setup,haproxy]
+
+- name: Borg
+  hosts: all
+  roles:
+    - role: borg
+  tags: [setup,borg]

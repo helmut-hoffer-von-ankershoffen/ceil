@@ -48,6 +48,7 @@ See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
 - [x] Act as Docker registry mirror using official docker image `registry:2`
 - [x] Act as private Docker registry
 - [x] Act as http(s) proxy from router to k8s ingress for public access
+- [x] Act as backup server for Docker and k8s volumes using borgbackup
 - [ ] kail and harbor
 
 ### Phase 4: PiWatch

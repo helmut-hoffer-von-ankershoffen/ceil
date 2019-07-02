@@ -1,0 +1,39 @@
+---
+
+- name: "Check all hosts accessible"
+  assert:
+    that:
+      - ansible_play_hosts == ansible_play_hosts_all
+
+- name: Download executable
+  get_url:
+    dest: "/usr/local/bin/borg"
+    checksum: "{{ borgbackup_checksum }}"
+    owner: "{{ borgbackup_owner }}"
+    group: "{{ borgbackup_group }}"
+    mode: "0755"
+    url: "{{ borgbackup_download_url }}"
+
+- name: Setup user
+  user:
+    name: '{{ borgbackup_user }}'
+    shell: '/bin/bash'
+    home: '{{ borgbackup_home }}'
+    createhome: 'yes'
+    comment: 'managed by ansible'
+
+- name: Create pool directory
+  file:
+    path: "{{ borgbackup_home }}{{ borgbackup_pool }}"
+    state: "directory"
+    owner: "{{ borgbackup_user }}"
+    group: "{{ borgbackup_user }}"
+    mode: "0770"
+
+- name: Setup authorized_keys per backup client
+  authorized_key:
+    user: "{{ borgbackup_user }}"
+    key: "{{ item.rsa_pub }}"
+    key_options: 'command="cd {{ borgbackup_home }}{{ borgbackup_pool }}/{{ item.hostname }};borg serve {% if item.appendonly %}--append-only {% endif %}--restrict-to-path {{ borgbackup_home }}/{{ borgbackup_pool }}/{{ item.hostname }}",no-port-forwarding,no-X11-forwarding,no-pty,no-agent-forwarding,no-user-rc'
+  with_items: "{{ borgbackup_clients }}"
+

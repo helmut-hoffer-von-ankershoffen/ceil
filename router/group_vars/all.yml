@@ -73,3 +73,28 @@ haproxy_logrotate_backlog_size: 366
 
 # haproxy template source
 haproxy_cfg_template: haproxy.cfg.j2
+
+
+## Borg backup
+
+borgbackup_user: 'borgbackup'
+borgbackup_home: '/var/borgbackup/'
+borgbackup_pool: 'repos'
+borgbackup_clients:
+  - hostname: 'courses.development'
+    rsa_pub: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDMd1J945Tdg8DEkTbkoMz/w/Ira0M1lIdJayVIib11phRcdlURotokC2u8TF8xZR7omq4EuGb8ZeTHVevirzQm668I8pbbXkvuaBuWlaBFB2vXsfV1RVyuGFkwqADgwaIp+dnYad6r9tJ2O0qcPUved5s7egjHNyd+ys+PCvty6Fg3P0q6sDBB0Cs0NfRTrLu4JaI6dbLmDqmeg5HMYVRwJvkhBcDm+lnXABUm03B3Y6xjKef2H0Bd0NGHo24OceAkdZpKLLEQkHhwRiV+scKwy8puueMIQtQj3t/wwI00ErNkuLDsSkn9l1PZ1EmTVvf0+BRWsUxUWKa2OIlkhYMn root@courses'
+    appendonly: false
+  - hostname: 'courses.staging'
+    rsa_pub: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDs1o5JQT2eNOWzX/Y6Gil2VM+8Qf657hBxqe4X7BH+0p3FxfvRT3lhddhZcLd3A/fuv2PA8UIAbePtjxxBbX4ceoPIGPcrGzlVUsvHqbiS3YqbfWsn9Pwplbv2z3MWtbeMeKFfGx/4DD+wYawlCY8kXE9AXGnl7tdUsYXbV9nA4mJImYot2fYiHsuyLyKOMEb6f3bB9CGXGWxztsTVP9ju7XWvEcJzBTkjb3PDGlOxK/qv47+mdx8gzuNB4yqWxg1SMMWGao6BsZNYADjHnxSjBHGgCYpKVA4sPWNDYXA+pZMwM7C9loa6/rxsdxXH+jtDxekgbbZiovewsfnvI7GV root@courses'
+    appendonly: false
+  - hostname: 'courses.production'
+    rsa_pub: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmfCZ4RXXpOp8ikuTI7/DBSHNdoNqmKxAODUhEvOeMtjdUwqD7EduLTECfkI/aRfPnK7vnOYj2SJH2N8ZyoTQKdR4KMmAgBxtGMmB4/7qwHOnV+B/XgpwZLk581OBNfMWMRBNRGeJibNFw/Ovo5jkl5Z5W/8FoB9wIQhHgqCmfVYMTj33aboeORgHdqWpb85TfNsVMBm4nNkJKUgAhsWEp4RomGRnmOUcCHOpF6EcWs4GPAOir8u9kCIOfe0TQWmHMnDhTzXw7AyB4BvztBK8Xi8GsDHkrDSmX+FWsk1uJxWe83qxmIF9bIWcBkcLrMg+k70ekGgyraSSbjUQIFFzx root@courses'
+    appendonly: false
+
+borgbackup_version: "1.1.4"
+borgbackup_checksum: "sha256:4ecf507f21f0db7c437b2ef34566273d7ba5a7d05e921c6f0e3406c3f96933a7"
+borgbackup_download_url: "https://github.com/borgbackup/borg/releases/download/{{ borgbackup_version }}/borg-linux64"
+
+borgbackup_owner: root
+borgbackup_group: root
+borgbackup_shell: "/bin/bash"
