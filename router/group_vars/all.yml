@@ -90,6 +90,9 @@ borgbackup_clients:
   - hostname: 'courses.production'
     rsa_pub: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCmfCZ4RXXpOp8ikuTI7/DBSHNdoNqmKxAODUhEvOeMtjdUwqD7EduLTECfkI/aRfPnK7vnOYj2SJH2N8ZyoTQKdR4KMmAgBxtGMmB4/7qwHOnV+B/XgpwZLk581OBNfMWMRBNRGeJibNFw/Ovo5jkl5Z5W/8FoB9wIQhHgqCmfVYMTj33aboeORgHdqWpb85TfNsVMBm4nNkJKUgAhsWEp4RomGRnmOUcCHOpF6EcWs4GPAOir8u9kCIOfe0TQWmHMnDhTzXw7AyB4BvztBK8Xi8GsDHkrDSmX+FWsk1uJxWe83qxmIF9bIWcBkcLrMg+k70ekGgyraSSbjUQIFFzx root@courses'
     appendonly: false
+  - hostname: 'hsk2-shop.staging'
+    rsa_pub: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDPMIWrc7emERbW+aOjy+6dWqg0QVRNPfY8p9OzEa2qSlPQpm9oUrsT0WorbyWlPXEeqyv3zW139qxuPwrXlC1IdcBYJz8aoUsuOhxAPBEIw8YgrNCYb3JuXAX2G1OJ5GVxyfoJohDlxRe9HEw4wLLaKm5Ax50U8BeNlWe45BAnAlr/eUSPTkDFaeKHo+H4dAKeqmYHuNc2Av2n5lSNIB2Go5LT5/PxWPUrC2PscZMVLfHGYtvZE8fcyJMBLlivfQ0oNYcMsZqERstts4SRV5caxssOqypqvROf4Xu4Y1CeRMJjk5e+z3+lkHuMa4NJoBu4fjN3AIqte30HGEoUhwFt root@hsk2-shop'
+    appendonly: false
 
 borgbackup_version: "1.1.4"
 borgbackup_checksum: "sha256:4ecf507f21f0db7c437b2ef34566273d7ba5a7d05e921c6f0e3406c3f96933a7"
