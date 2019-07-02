@@ -106,9 +106,6 @@ router-vpn: ## Setup VPN
 router-haproxy: ## Setup HAProxy
 	cd router && ansible-playbook main.yml --tags "haproxy"
 
-router-projects: ## Setup projects
-	cd router && ansible-playbook main.yml --tags "projects"
-
 one-ssh: ## ssh to one
 	ssh root@max-one.local
 

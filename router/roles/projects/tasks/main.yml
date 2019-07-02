@@ -1,7 +1,0 @@
----
-
-- name: "Generate project dirs"
-  file:
-    state: directory
-    path: "{{ item }}"
-  with_items: "{{ project_dirs }}"
