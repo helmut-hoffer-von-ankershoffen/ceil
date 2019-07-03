@@ -23,6 +23,11 @@ help: ## This help dialog.
 %:      # thanks to chakrit
 	@:    # thanks to Wi.lliam Pursell
 
+ansible-encrypt:  ## Encrypt value
+	ansible-vault encrypt_string --vault-password-file .ansible.password "$(wordlist 2,2,$(MAKECMDGOALS))" --name "$(wordlist 3,3,$(MAKECMDGOALS))"
+
+ansible-decrypt:  ## Decrypt value
+	ansible-vault encrypt_string --vault-password-file .ansible.password "$(wordlist 2,2,$(MAKECMDGOALS))" --name "$(wordlist 3,3,$(MAKECMDGOALS))"
 
 prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, install packages via homebrew, update /etc/hosts etc.)
 	workstation/MacOSX/bootstrap
