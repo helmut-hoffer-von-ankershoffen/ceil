@@ -32,6 +32,7 @@ homebrew_cask_apps:
   - sequel-pro              # UI for SQL
   - tunnelblick             # VPN Client
   - jetbrains-toolbox       # Installer for products from Jetbrain etc.
+  - borgbackup              # Borgbackup
 
 composer_packages: []
 

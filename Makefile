@@ -30,11 +30,11 @@ ansible-decrypt:  ## Decrypt value
 	ansible-vault encrypt_string --vault-password-file .ansible.password "$(wordlist 2,2,$(MAKECMDGOALS))" --name "$(wordlist 3,3,$(MAKECMDGOALS))"
 
 prepare-mac: ## Prepare mac for provisioning (install homebrew and ansible, install packages via homebrew, update /etc/hosts etc.)
-	workstation/MacOSX/bootstrap
+	workflow/requirements/macOS/bootstrap
 	source ~/.bash_profile && rbenv install --skip-existing 2.2.2
-	ansible-galaxy install -r workstation/macOS/ansible/requirements.yml
-	ansible-playbook -i "localhost," workstation/macOS/ansible/playbook.yml --ask-become-pass
-	ansible-playbook -i "localhost," workstation/generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
+	ansible-galaxy install -r workflow/requirements/macOS/ansible/requirements.yml
+	ansible-playbook -i "localhost," workflow/requirements/macOS/ansible/playbook.yml --ask-become-pass
+	ansible-playbook -i "localhost," workflow/requirements/generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 	ansible-galaxy install -r router/requirements.yaml || true
 	ansible-galaxy install -r k8s/requirements.yaml || true
 	source ~/.bash_profile && $(SHELL) -c 'cd workflow/requirements/macOS/docker; . ./daemon_check.sh'
@@ -43,7 +43,7 @@ prepare-ansible: ## Install ansible requirementss
 	ansible-galaxy install -r router/requirements.yaml || true
 
 prepare-hosts: ## Update /etc/hosts
-	ansible-playbook -i "localhost," workstation/Generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
+	ansible-playbook -i "localhost," workflow/requirements/generic/ansible/playbook.yml --tags "hosts" --ask-become-pass
 
 prepare-docker: ## Prepare Docker on workstation
 	source ~/.bash_profile && $(SHELL) -c 'cd workflow/requirements/macOS/docker; . ./daemon_check.sh'
@@ -51,68 +51,56 @@ prepare-docker: ## Prepare Docker on workstation
 router-provision: ## Provision router for boot (flash SD card with OS)
 	host/provision/router
 
-one-provision: ## Provision ks8 node one for boot (flash SD card with OS)
-	host/provision/one
-
-two-provision: ## Provision ks8 node two for boot (flash SD card with OS)
-	host/provision/two
-
-three-provision: ## Provision ks8 node three for boot (flash SD card with OS)
-	host/provision/three
-
-four-provision: ## Provision ks8 node four for boot (flash SD card with OS)
-	host/provision/four
-
 workstation-route-add: ## Add route to k8s subnet via router
-	router/scripts/route-to-subnet
+	workflow/provision/router/scripts/route-to-subnet
 
 workstation-route-del: ## Delete route to k8s subnet
-	router/scripts/route-to-subnet-delete
+	workflow/provision/router/scripts/route-to-subnet-delete
 
 router-df: ## Show df of router
-	cd router && ansible -a "df -kh" all
+	cd workflow/provision/router && ansible -a "df -kh" all
 
 router-uptime: ## Show uptime of router
-	cd router && ansible -a uptime all
+	cd workflow/provision/router && ansible -a uptime all
 
 router-reboot: ## Reboot max-one
-	cd router && ansible -a "shutdown -r now" all
+	cd workflow/provision/router && ansible -a "shutdown -r now" all
 
 router-check-ip: ## Check IP addresss of router
-	cd router && ansible -a "hostname --ip" all
+	cd workflow/provision/router && ansible -a "hostname --ip" all
 
 router-setup: ## Setup router, .ovpn file will be downloaded into router/out
-	cd router && ansible-playbook main.yml --tags "setup"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "setup"
 
 router-base: ## Setup base
-	cd router && ansible-playbook main.yml --tags "base"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "base"
 
 router-thumb-drive: ## Setup thumb drive
-	cd router && ansible-playbook main.yml --tags "thumb_drive"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "thumb_drive"
 
 router-routing: ## Setup routing
-	cd router && ansible-playbook main.yml --tags "routing"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "routing"
 
 router-ddns: ## Setup DDNS
-	cd router && ansible-playbook main.yml --tags "ddns"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "ddns"
 
 router-firewall: ## Setup Firewall
-	cd router && ansible-playbook main.yml --tags "firewall"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "firewall"
 
 router-docker-registry-mirror: ## Setup docker registry mirror
-	cd router && ansible-playbook main.yml --tags "docker_registry_private"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "docker_registry_private"
 
 router-docker-registry-private: ## Setup private docker registry
-	cd router && ansible-playbook main.yml --tags "docker_registry_private"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "docker_registry_private"
 
 router-vpn: ## Setup VPN
-	cd router && ansible-playbook main.yml --tags "vpn"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "vpn"
 
 router-haproxy: ## Setup HAProxy
-	cd router && ansible-playbook main.yml --tags "haproxy"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "haproxy"
 
 router-borg: ## Setup Borg backup server
-	cd router && ansible-playbook main.yml --tags "borg"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "borg"
 
 one-ssh: ## ssh to one
 	ssh root@max-one.local
@@ -124,49 +112,49 @@ three-ssh: ## ssh to three
 	ssh root@max-three.local
 
 k8s-ping: ## Ping nodes
-	cd k8s && ansible -m ping all
+	cd workflow/provision/k8s && ansible -m ping all
 
 k8s-check-ip: ## Check IP addresses of nodes
-	cd k8s && ansible -a "hostname --ip" all
+	cd workflow/provision/k8s && ansible -a "hostname --ip" all
 
 k8s-uptime: ## Show uptime of nodes
-	cd k8s && ansible -a uptime all
+	cd workflow/provision/k8s && ansible -a uptime all
 
 k8s-df: ## Show df of nodes
-	cd k8s && ansible -a "df -kh" all
+	cd workflow/provision/k8s && ansible -a "df -kh" all
 
 k8s-reboot: ## Reboot all k8s nodes
-	cd k8s && ansible -a "shutdown -r now" all
+	cd workflow/provision/k8s && ansible -a "shutdown -r now" all
 
 k8s-setup: ## Setup cluster
-	cd k8s && ansible-playbook setup.yml
+	cd workflow/provision/k8s && ansible-playbook setup.yml
 
 k8s-proxy: ## Open proxy
 	kubectl proxy
 
 k8s-dashboard-bearer-token-show: ## Show dashboard bearer token
-	k8s/scripts/dashboard-bearer-token-show
+	workflow/provision/k8s/scripts/dashboard-bearer-token-show
 
 k8s-dashboard-open: ## Open Dashboard
 	python -mwebbrowser http://localhost:8001/api/v1/namespaces/kube-system/services/https:kubernetes-dashboard:/proxy/#!/overview?namespace=default
 
 k8s-remove: ## Remove previous installation of Kubernetes cluster
-	cd k8s && ansible-playbook remove.yml
+	cd workflow/provision/k8s && ansible-playbook remove.yml
 
 thumb-wipe: ## Wipe thump drives of nodes (not master)
-	cd k8s && ansible-playbook thumb-wipe.yml
+	cd workflow/provision/k8s && ansible-playbook thumb-wipe.yml
 
 gluster-heketi-setup: ## Setup GlusterFS + Heketi for dynamic volume provisioning as default storage class backed by thumb drives
-	cd k8s && ansible-playbook gluster-heketi-setup.yml
+	cd workflow/provision/k8s && ansible-playbook gluster-heketi-setup.yml
 
 gluster-heketi-remove: ## Remove GlusterFS + Heketi incl. wiping thumb drives (YOU WILL LOSE ALL DATA ON ALL THUMB DRIVES)
-	cd k8s && ansible-playbook gluster-heketi-remove.yml
+	cd workflow/provision/k8s && ansible-playbook gluster-heketi-remove.yml
 
 helm-setup: ## Init helm CLI and deploy tiller  to cluster
-	cd k8s && ansible-playbook helm-setup.yml
+	cd workflow/provision/k8s && ansible-playbook helm-setup.yml
 
 helm-remove: ## Reset helm CLI and delete tiller from cluster
-	cd k8s && ansible-playbook helm-remove.yml
+	cd workflow/provision/k8s && ansible-playbook helm-remove.yml
 
 nodes-show: ## Show nodes
 	kubectl get nodes
@@ -184,34 +172,34 @@ endpoints-show: ## Show endpoints
 	kubectl get endpoints --all-namespaces
 
 metallb-deploy: ## Deploy MetalLB
-	deployment/metallb/deploy
+	workflow/deploy/metallb/deploy
 
 metallb-delete: ## Delete MetalLB
-	deployment/metallb/delete
+	workflow/deploy/metallb/delete
 
 ingress-show: ## Show ingress
 	kubectl get ingress --all-namespaces
 
 traefik-deploy: ## Deploy traefik ingress controller
-	deployment/traefik/deploy
+	workflow/deploy/traefik/deploy
 
 traefik-delete: ## Delete traefik ingress controller
-	deployment/traefik/delete
+	workflow/deploy/traefik/delete
 
 traefik-ui-open: ## Open traefik UI
 	python -mwebbrowser http://traefik-ui.max.local
 
 httpd-deploy: ## Deploy httpd
-	deployment/httpd/deploy
+	workflow/deploy/httpd/deploy
 
 httpd-open: ## Open httpd
 	python -mwebbrowser http://httpd.max.local
 
 httpd-delete: ## Delete httpd
-	deployment/httpd/delete
+	workflow/deploy/httpd/delete
 
 prometheus-deploy: ## Deploy prometheus
-	deployment/prometheus/deploy
+	workflow/deploy/prometheus/deploy
 
 prometheus-open: ## Open prometheus
 	python -mwebbrowser http://prometheus.max.local
@@ -219,10 +207,10 @@ prometheus-open: ## Open prometheus
 	python -mwebbrowser http://pushgateway.max.local
 
 prometheus-delete: ## Delete prometheus
-	deployment/prometheus/delete
+	workflow/deploy/prometheus/delete
 
 grafana-deploy: ## Deploy grafana
-	deployment/grafana/deploy
+	workflow/deploy/grafana/deploy
 
 grafana-admin-password-show: ## Show grafana password
 	kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
@@ -231,22 +219,22 @@ grafana-open: ## Open grafana
 	python -mwebbrowser http://grafana.max.local
 
 grafana-delete: ## Delete grafana
-	deployment/grafana/delete
+	workflow/deploy/grafana/delete
 
 kubewatch-deploy: ## Deploy kubewatch
-	deployment/kubewatch/deploy
+	workflow/deploy/kubewatch/deploy
 
 kubewatch-delete: ## Delete kubewatch
-	deployment/kubewatch/delete
+	workflow/deploy/kubewatch/delete
 
 podinfo-deploy: ## Deploy podinfo
-	deployment/podinfo/deploy
+	workflow/deploy/podinfo/deploy
 
 podinfo-delete: ## Delete podinfo
-	deployment/podinfo/delete
+	workflow/deploy/podinfo/delete
 
 ngrok-deploy: ## Deploy ngrok
-	deployment/ngrok/deploy
+	workflow/deploy/ngrok/deploy
 
 ngrok-tunnel-port-exposed-show: ## Show port exposed by ngrok-tunnel
 	kubectl get --namespace ngrok -o jsonpath="{.spec.ports[0].nodePort}" services tunnel-ngrok
@@ -255,19 +243,19 @@ ngrok-status: ## Show ngrok status
 	python -mwebbrowser http://max-one.local:31742/status
 
 ngrok-delete: ## Delete ngrok
-	deployment/ngrok/delete
+	workflow/deploy/ngrok/delete
 
 piphp-deploy: ## Deploy piphp
-	deployment/piphp/deploy
+	workflow/deploy/piphp/deploy
 
 piphp-delete: ## Delete piphp
-	deployment/piphp/delete
+	workflow/deploy/piphp/delete
 
 jx-deploy: ## Deploy Jenkins X
-	deployment/jx/deploy
+	workflow/deploy/jx/deploy
 
 jx-delete: ## Delete Jenkins X
-	deployment/jx/delete
+	workflow/deploy/jx/delete
 
 all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
 

@@ -190,9 +190,6 @@ Alternatively you can execute the setup and deploy steps one-by-one as described
 8) Open Prometheus UI in your browser: `make prometheus-open`
 9) Open Grafana dashboards in your browser: `make grafana-open`
 
-Notes:
-- Add the contents of `workstation/etc/hosts` to `/etc/hosts` of your workstation for steps 6 to 9
-
 ## Setup K8S inc. persistence and helm/tiller
 
 1) Wipe thumb drives for GlusterFS using `make thumb-wipe`

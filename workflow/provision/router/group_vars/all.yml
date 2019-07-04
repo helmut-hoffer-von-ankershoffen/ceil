@@ -81,7 +81,7 @@ borgbackup_user: 'borgbackup'
 borgbackup_home: '/var/borgbackup/'
 borgbackup_pool: 'repos'
 borgbackup_clients:
-  - hostname: 'courses.developments'
+  - hostname: 'courses.development'
     rsa_pub: !vault |
       $ANSIBLE_VAULT;1.1;AES256
       37653335343163626365316364653639316439386262616561366238663832343732656631323432
