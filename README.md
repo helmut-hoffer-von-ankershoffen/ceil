@@ -2,7 +2,9 @@
 
 Enter `make help` to see available commands.
 
-See [branch master](https://github.com/helmuthva/ceil) for the RPi variant.
+Hints:
+* See [branch master](https://github.com/helmuthva/ceil) for the RPi variant of this cluster
+* See [Project jetson](https://github.com/helmuthva/jetson) on how to add an Nvidia Jetson Nano as a worker node to this cluster.
 
 ## Goals
 
