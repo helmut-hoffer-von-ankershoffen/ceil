@@ -1,0 +1,16 @@
+---
+apiVersion: kubeadm.k8s.io/v1beta1
+caCertPath: /etc/kubernetes/pki/ca.crt
+discovery:
+  bootstrapToken:
+    apiServerEndpoint: {{ hostvars[groups['master'][0]].ansible_host }}:6443
+    token: {{ kubernetes_token }}
+    unsafeSkipCAVerification: true
+  timeout: 5m0s
+  tlsBootstrapToken: {{ kubernetes_token }}
+kind: JoinConfiguration
+nodeRegistration:
+  criSocket: /var/run/dockershim.sock
+  name: {{ ansible_fqdn }}
+  kubeletExtraArgs:
+    node-labels: "storage=true"

@@ -7,7 +7,7 @@
 
 - name: "Init helm on workstation and install tiller in cluster"
   command: helm init --service-account tiller --tiller-image=jessestuart/tiller --history-max 20 --wait
-  sudo: no
+  become: no
   delegate_to: localhost
   register: helm
 

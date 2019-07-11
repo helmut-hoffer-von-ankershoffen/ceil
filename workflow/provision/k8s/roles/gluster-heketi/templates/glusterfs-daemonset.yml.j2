@@ -25,12 +25,12 @@ spec:
       nodeSelector:
         storagenode: glusterfs
 {% else %}
-{%   if k8s_heketi_gluster_tolerations %}
+{% if k8s_heketi_gluster_tolerations %}
       tolerations: {{ k8s_heketi_gluster_tolerations | to_json }}
-{%   endif %}
-{%   if k8s_heketi_gluster_nodeselector %}
+{% endif %}
+{% if k8s_heketi_gluster_nodeselector %}
       nodeSelector: {{ k8s_heketi_gluster_nodeselector | to_json }}
-{%   endif %}
+{% endif %}
 {% endif %}
       hostNetwork: true
       containers:

@@ -21,7 +21,7 @@
 - name: "Sleep"
   delegate_to: localhost
   shell: sleep 30
-  sudo: false
+  become: false
 
 - name: "Wait for up"
   wait_for_connection:
@@ -114,7 +114,7 @@
 - name: "Sleep"
   delegate_to: localhost
   shell: sleep 30
-  sudo: false
+  become: false
 
 - name: "Wait for up"
   wait_for_connection:

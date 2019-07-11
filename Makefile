@@ -129,6 +129,9 @@ k8s-reboot: ## Reboot all k8s nodes
 k8s-setup: ## Setup cluster
 	cd workflow/provision/k8s && ansible-playbook setup.yml
 
+k8s-token-create: ## Create token for other nodes to join
+	ssh root@max-one.local kubeadm token create
+
 k8s-proxy: ## Open proxy
 	kubectl proxy
 
@@ -141,7 +144,7 @@ k8s-dashboard-open: ## Open Dashboard
 k8s-remove: ## Remove previous installation of Kubernetes cluster
 	cd workflow/provision/k8s && ansible-playbook remove.yml
 
-thumb-wipe: ## Wipe thump drives of nodes (not master)
+thumb-wipe: ## Wipe thump drives for k8s on all nodes including master
 	cd workflow/provision/k8s && ansible-playbook thumb-wipe.yml
 
 gluster-heketi-setup: ## Setup GlusterFS + Heketi for dynamic volume provisioning as default storage class backed by thumb drives

@@ -1,7 +1,25 @@
 ---
 
+- name: "Create /etc/kubernetes"
+  file:
+    path: /etc/kubernetes
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
+- name: "Inject join configuration"
+  template:
+    src: join.conf.j2
+    dest: /etc/kubernetes/join.conf
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
 - name: "Join cluster"
-  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ hostvars[groups['master'][0]].ansible_host }}:6443 --discovery-token-unsafe-skip-ca-verification
+  shell: kubeadm join --ignore-preflight-errors=all --config /etc/kubernetes/join.conf
   when: kubeadm_reset is succeeded
   register: kubeadm_join
   become: true
@@ -13,3 +31,4 @@
     daemon_reload: yes
     enabled: yes
   register: kubelet_poke
+  become: true

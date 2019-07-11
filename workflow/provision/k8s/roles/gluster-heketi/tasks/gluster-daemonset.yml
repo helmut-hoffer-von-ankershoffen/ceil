@@ -118,4 +118,4 @@
 - name: "Sleep for GlusterFS peers to find each other"
   delegate_to: localhost
   shell: sleep 30
-  sudo: false
+  become: false

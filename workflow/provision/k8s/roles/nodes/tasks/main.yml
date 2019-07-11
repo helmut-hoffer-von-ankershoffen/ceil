@@ -81,7 +81,6 @@
     - gnupg2
     - software-properties-common
     - ipvsadm
-    - docker-ce
     - dnsutils
     - docker-ce
 
@@ -108,7 +107,7 @@
 - name: "Pass bridged IPv4 traffic to iptables' chains"
   sysctl:
     name: net.bridge.bridge-nf-call-iptables
-    value: 1
+    value: "1"
     state: present
 
 - name: "Add Google Cloud repo key"
@@ -158,7 +157,7 @@
 - name: "Sleep"
   delegate_to: localhost
   shell: sleep 10
-  sudo: false
+  become: false
 
 - name: "kubeadmn config images pull"
   shell: kubeadm config images pull --kubernetes-version={{ kubernetes_version }}

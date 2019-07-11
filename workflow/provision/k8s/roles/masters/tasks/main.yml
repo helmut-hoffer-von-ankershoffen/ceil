@@ -32,10 +32,29 @@
     proto: tcp
     state: enabled
 
+- name: "Create /etc/kubernetes"
+  file:
+    path: /etc/kubernetes
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
+- name: "Inject init configuration"
+  template:
+    src: init.conf.j2
+    dest: /etc/kubernetes/init.conf
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+  when: inventory_hostname == groups["master"][0]
+
 - name: "kubeadm init"
-  shell: kubeadm init --ignore-preflight-errors=all --apiserver-advertise-address={{ ansible_host }} --token={{ kubernetes_token }} --kubernetes-version={{ kubernetes_version }} --pod-network-cidr={{ kubernetes_podnet }}
+  shell: kubeadm init --ignore-preflight-errors=all --config /etc/kubernetes/init.conf
   register: kubeadm_init
-  when: kubeadm_reset is succeeded
+  when: kubeadm_reset is succeeded and inventory_hostname == groups["master"][0]
   become: true
 
 - name: "Create config directory"
@@ -46,6 +65,7 @@
     group: root
     mode: 0755
   become: true
+  when: inventory_hostname == groups["master"][0]
 
 - name: "Copy admin.conf to config directory of root"
   copy:
@@ -57,38 +77,49 @@
     remote_src: yes
     backup: yes
   become: true
-  when: kubeadm_init
+  when: kubeadm_init and inventory_hostname == groups["master"][0]
 
-- name: "Copy config to ~/.kube/config"
+- name: "Fetch config to ~/.kube/config on workstation"
   fetch:
     src: /root/.kube/config
     dest: ~/.kube/config
     flat: yes
+  when: inventory_hostname == groups["master"][0]
+
+- name: "Inject join configuration"
+  template:
+    src: join.conf.j2
+    dest: /etc/kubernetes/join.conf
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
 
 - name: "Join cluster"
-  shell: kubeadm join --ignore-preflight-errors=all --token {{ kubernetes_token }} {{ hostvars[groups['master'][0]].ansible_host }}:6443 --discovery-token-unsafe-skip-ca-verification
-  when: kubeadm_reset is succeeded
+  shell: kubeadm join --ignore-preflight-errors=all --config /etc/kubernetes/join.conf
   become: true
+  when: kubeadm_reset is succeeded
   register: kubeadm_join
 
 - name: "Install Weave networking"
   shell: "kubectl apply -f \"https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')\""
   become: true
+  when: inventory_hostname == groups["master"][0]
 
 - name: "Copy resolv.k8s.conf for k8s master that is router as well"
-  become: true
   template:
     src: resolv.k8s.conf
     dest: /etc/resolv.k8s.conf
+  become: true
   when: inventory_hostname == groups["master"][0]
 
 - name: "Let kubelet on master use resolv.k8s.conf to avoid CoreDNS crash on detecting loop with dnsmasq in place"
-  become: true
   lineinfile:
     dest: /var/lib/kubelet/config.yaml
     regexp: 'resolvConf:.+$'
     line: "resolvConf: /etc/resolv.k8s.conf"
     state: present
+  become: true
   when: inventory_hostname == groups["master"][0]
 
 - name: "Poke kubelet"
@@ -97,5 +128,6 @@
     state: restarted
     daemon_reload: yes
     enabled: yes
+  become: true
   register: kubelet_poke
 

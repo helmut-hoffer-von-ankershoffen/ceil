@@ -7,7 +7,7 @@
 
 - name: "Rest helm on workstation"
   command: timeout 10 helm reset --force
-  sudo: no
+  become: no
   delegate_to: localhost
   register: helm
   ignore_errors: true

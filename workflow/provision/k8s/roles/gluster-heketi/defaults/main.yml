@@ -16,6 +16,7 @@ k8s_heketi_gluster_tolerations:
 
 # Kubernetes node-selector
 k8s_heketi_gluster_nodeselector:
+  storage: "true"
 
 # The underlying raw storage device
 k8s_heketi_gluster_storage_device: "/dev/gluster"
