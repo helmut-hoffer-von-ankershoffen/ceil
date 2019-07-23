@@ -72,6 +72,7 @@
     - software-properties-common
     - ipvsadm
     - docker-ce
+    - htop
 
 - name: Install libraries
   pip:

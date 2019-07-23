@@ -88,7 +88,7 @@ router-firewall: ## Setup Firewall
 	cd workflow/provision/router && ansible-playbook main.yml --tags "firewall"
 
 router-docker-registry-mirror: ## Setup docker registry mirror
-	cd workflow/provision/router && ansible-playbook main.yml --tags "docker_registry_private"
+	cd workflow/provision/router && ansible-playbook main.yml --tags "docker_registry_mirror"
 
 router-docker-registry-private: ## Setup private docker registry
 	cd workflow/provision/router && ansible-playbook main.yml --tags "docker_registry_private"
