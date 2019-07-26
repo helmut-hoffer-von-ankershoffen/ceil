@@ -219,6 +219,12 @@ Notes:
 
 1) Execute `make teardown` to delete all deployments and remove K8S.
 
+## Notes
+
+* Password file for vault must reside in the root of this project, named `.ansible.password`
+* Encrypt single variable: `ansible-vault encrypt_string  --vault-password-file .ansible.password 'SECRET'`
+* Decrypt single variable: `yq read YAML_FILE 'YAML_PATH' | ansible-vault decrypt --vault-password-file .ansible.password`
+
 ## Obstacles 
 
 * Examples for setting up K8S on bare metal mostly outdated and/or incomplete or making undocumented assumptions or not using Ansible correctly => full rewrite
@@ -233,8 +239,3 @@ Notes:
 * https://medium.com/@carlosedp/multiple-traefik-ingresses-with-letsencrypt-https-certificates-on-kubernetes-b590550280cf (traefik,let's encrypt)
 * https://stefanprodan.com/2018/expose-kubernetes-services-over-http-with-ngrok/ (ngrok, k8s)
 
-## Notes
-
-* Password file for vault must reside in the root of this project, named .ansible.password
-* Encrypt single variable: `ansible-vault encrypt_string  --vault-password-file .ansible.password 'SECRET'`
-* Decrypt single variable: `yq read YAML_FILE 'YAML_PATH' | ansible-vault decrypt --vault-password-file .ansible.password`
