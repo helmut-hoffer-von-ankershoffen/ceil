@@ -32,6 +32,7 @@ Hints:
 - [x] Traefik as ingress inc. Traefik dashboard
 - [x] busybox-http using Traefik as ingress for demos
 - [x] Grafana and prometheus
+- [x] Minio for S3 compatible storage
 
 ### Phase 2: Storage and Loadbalancing
 

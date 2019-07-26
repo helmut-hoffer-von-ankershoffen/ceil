@@ -260,6 +260,12 @@ jx-deploy: ## Deploy Jenkins X
 jx-delete: ## Delete Jenkins X
 	workflow/deploy/jx/delete
 
+minio-deploy: ## Deploy minio
+	workflow/deploy/minio/deploy
+
+minio-delete: ## Delete minio
+	workflow/deploy/minio/delete
+
 all-deploy: metallb-deploy traefik-deploy httpd-deploy prometheus-deploy grafana-deploy kubewatch-deploy podinfo-deploy ngrok-deploy ## Execute all deployments
 
 all-delete: ngrok-delete podinfo-delete kubewatch-delete grafana-delete prometheus-delete httpd-delete traefik-delete metallb-delete ## Delete all deployments

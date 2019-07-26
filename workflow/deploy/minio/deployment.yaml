@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: kubewatch
+  namespace: default
+spec:
+  containers:
+    - image: bitnami/kubewatch
+      imagePullPolicy: Always
+      name: kubewatch
+      volumeMounts:
+        - name: config-volume
+          mountPath: /root
+      env:
+        - name: SLACK_TOKEN
+          value: ''
+        - name: SLACK_CHANNEL
+          value: ''
+        - name: KW_SLACK_TOKEN
+          value: ''
+        - name: KW_WEBHOOK_URL
+          value: 'http://ceil-router.local/traffic/kubewatch-webhook'
+        - name: WEBHOOK_URL
+          value: 'http://ceil-router.local/traffic/kubewatch-webhook'
+  restartPolicy: Always
+  serviceAccountName: kubewatch
+  volumes:
+    - name: config-volume
+      configMap:
+        name: kubewatch
