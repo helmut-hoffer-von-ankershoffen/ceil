@@ -6,6 +6,8 @@ Why the name? `intval(ceil(M_PI)) === 4` which is the number of k8s nodes of the
 
 See [branch max](https://github.com/helmuthva/ceil/tree/max) for the Mini PC (amd64) variant.
 
+Author: [**Helmut Hoffer von Ankershoffen né Oertel**](https://helmut.hoffer-von-ankershoffen.me/)
+
 ## Goals
 
 * Setup auto-provisioned RPi cluster running K8S on bare-metal behind a RPi acting as a router
