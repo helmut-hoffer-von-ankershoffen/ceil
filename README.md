@@ -6,6 +6,8 @@ Hints:
 * See [branch master](https://github.com/helmuthva/ceil) for the RPi variant of this cluster
 * See [Project jetson](https://github.com/helmuthva/jetson) on how to add an Nvidia Jetson Nano (arm64) as a worker node to this cluster.
 
+Author: [**Helmut Hoffer von Ankershoffen né Oertel**](https://helmut.hoffer-von-ankershoffen.me/)
+
 ## Goals
 
 * Setup auto-provisioned Mini PC (amd64) cluster running K8S on bare-metal inc. router
